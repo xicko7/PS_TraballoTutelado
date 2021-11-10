@@ -21,5 +21,12 @@
         android:layout_gravity="center"
         android:textSize="24dp"
         />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Test1"
+        android:textSize="24dp">
+
+    </TextView>
 
 </LinearLayout>
