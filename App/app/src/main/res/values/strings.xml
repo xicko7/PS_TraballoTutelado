@@ -4,4 +4,6 @@
     <string name="singleplayer_bt">Singleplayer</string>
     <string name="multiplayer_bt">Multiplayer</string>
     <string name="diccionario_bt">Diccionario</string>
+    <string name="title_diccionario">Diccionario</string>
+    <string name="addWord">Añadir palabra</string>
 </resources>
