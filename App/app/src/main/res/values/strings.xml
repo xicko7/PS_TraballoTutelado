@@ -3,7 +3,13 @@
     <string name="title_app">ForcApp</string>
     <string name="singleplayer_bt">Singleplayer</string>
     <string name="multiplayer_bt">Multiplayer</string>
-    <string name="diccionario_bt">Diccionario</string>
-    <string name="title_diccionario">Diccionario</string>
-    <string name="addWord">Añadir palabra</string>
+    <string name="diccionario_bt">Dicionario</string>
+    <string name="title_dicionario">Dicionario</string>
+    <string name="addWord">Engadir palabra</string>
+    <string name="remove">Toca para eliminar</string>
+    <string name="dialogOK">Aceptar</string>
+    <string name="dialogCancel">Cancelar</string>
+    <string name="add_dialog">Engadir nova palabra</string>
+    <string name="KEY_TEXT_REMOVE">remove</string>
+    <string name="remove_dialog">Seguro que desexa eliminar?</string>
 </resources>
