@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ForcApp</string>
+    <string name="title_app">ForcApp</string>
+    <string name="singleplayer_bt">Singleplayer</string>
+    <string name="multiplayer_bt">Multiplayer</string>
+    <string name="diccionario_bt">Diccionario</string>
 </resources>
