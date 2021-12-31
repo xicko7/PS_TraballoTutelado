@@ -7,12 +7,12 @@ import androidx.room.Room;
 public class WordDatabaseClient {
     private Context mCtx;
     private static WordDatabaseClient mInstance;
-    private WordDatabase wordDatabase; //our app database object
+    private WordDatabase_Impl wordDatabase; //our app database object
 
     private WordDatabaseClient(Context mCtx) {
         this.mCtx = mCtx;
         //creating the app database with Room database builder
-        wordDatabase = Room.databaseBuilder(mCtx, WordDatabase.class, "Words.db").build();
+        wordDatabase = (WordDatabase_Impl) Room.databaseBuilder(mCtx, WordDatabase.class, "Words.db").build();
 // see also option .allowMainThreadQueries() (NOT recommended)
     }
 
@@ -22,7 +22,7 @@ public class WordDatabaseClient {
         return mInstance;
     }
 
-    public WordDatabase getWordDatabase() {
+    public WordDatabase_Impl getWordDatabase() {
         return wordDatabase;
     }
 

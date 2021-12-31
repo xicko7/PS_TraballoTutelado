@@ -2,6 +2,7 @@ package com.example.forcapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.forcapp.database.WordDatabaseClient;
+import com.example.forcapp.entity.Word;
 
 import java.util.ArrayList;
 
@@ -122,4 +126,22 @@ public class Dictionary extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    private void insertWotd(Word word) {
+        class GetArticles extends AsyncTask<Void, Void, Word> { // claseinterna
+            @Override
+            protected Word doInBackground(Void... voids) {
+                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWord(word);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Word word) {
+                super.onPostExecute(word);// Actualizar la UI
+            }
+        }
+        GetArticles gf = new GetArticles(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
+
 }
