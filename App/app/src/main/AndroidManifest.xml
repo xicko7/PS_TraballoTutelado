@@ -18,6 +18,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".Dictionary"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+        </activity>
+
     </application>
 
 </manifest>
