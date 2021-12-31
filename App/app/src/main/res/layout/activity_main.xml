@@ -38,7 +38,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/multiplayer_bt"
         android:layout_centerHorizontal="true"
-        android:text="@string/singleplayer_bt" />
+        android:text="@string/singleplayer_bt"
+        />
 
     <Button
         android:id="@+id/multiplayer_bt"
