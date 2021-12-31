@@ -94,8 +94,8 @@ public class Dictionary extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(getApplicationContext(), R.string.dialogOK, Toast.LENGTH_SHORT).show();
-                added = Integer.parseInt(input.getText().toString());
                 mAdapter.addWord(String.valueOf(input.getText()));
+                insertWord(new Word(input.getText().toString()));
             }
         });
         builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
@@ -127,7 +127,8 @@ public class Dictionary extends AppCompatActivity {
         alert.show();
     }
 
-    private void insertWotd(Word word) {
+    private void insertWord(Word word) {
+        //Controlar que no se repita la palabra
         class GetArticles extends AsyncTask<Void, Void, Word> { // claseinterna
             @Override
             protected Word doInBackground(Void... voids) {

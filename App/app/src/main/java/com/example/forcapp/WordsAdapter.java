@@ -24,22 +24,13 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView title;
-        public Button removeButton;
+
 
         public MyViewHolder(View view) {
             super(view);
             title = view.findViewById(R.id.word);
             view.setOnClickListener(this);
-            removeButton = view.findViewById(R.id.remove_word);
 
-            removeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int i = 1;
-                    // Aquí débese implementar unha búsqueda na base de datos para obter o índice da palabra
-                    removeWord(i);
-                }
-            });
         }
 
         public void bind(Word word) {
