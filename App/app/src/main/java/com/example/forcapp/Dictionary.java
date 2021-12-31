@@ -108,7 +108,7 @@ public class Dictionary extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.remove_dialog);
 
-        builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mAdapter.removeWord(position);
