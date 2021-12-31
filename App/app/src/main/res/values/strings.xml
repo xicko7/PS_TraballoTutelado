@@ -12,4 +12,5 @@
     <string name="add_dialog">Engadir nova palabra</string>
     <string name="KEY_TEXT_REMOVE">remove</string>
     <string name="remove_dialog">Seguro que desexa eliminar?</string>
+    <string name="dialogAcept">Aceptar</string>
 </resources>
