@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.forcapp.database.WordDatabase;
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
 
@@ -23,8 +22,9 @@ import java.util.List;
 
 public class Dictionary extends AppCompatActivity {
 
+    List<Word> defaultWordList = new ArrayList<>();
     RecyclerView recyclerView;
-    Button add, back;
+    Button add, back, resetBD;
     private WordsAdapter mAdapter;
     ArrayList<Word> initialData = new ArrayList<>();
 
@@ -36,9 +36,9 @@ public class Dictionary extends AppCompatActivity {
 
         // Engadir as palabras por defecto da app
         setUI();
+        insertDefaultWordList(createDefaultWordList(),0);
 
-        // Engadir palabras da base de datos
-        showCurrentWords(mAdapter);
+
 
     }
 
@@ -47,6 +47,7 @@ public class Dictionary extends AppCompatActivity {
         recyclerView = findViewById(R.id.word_rv);
         add = findViewById(R.id.button_addWord);
         back = findViewById(R.id.dictionary_back_button);
+        resetBD = findViewById(R.id.reset_bd_bt);
 
         mAdapter = new WordsAdapter(initialData);
         LinearLayoutManager linearLayoutManager =
@@ -75,6 +76,13 @@ public class Dictionary extends AppCompatActivity {
             }
         });
 
+        resetBD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createResetBdDialog();
+            }
+        });
+
     }
 
     private void createAddDialog(WordsAdapter mAdapter) {
@@ -93,7 +101,7 @@ public class Dictionary extends AppCompatActivity {
                 if (String.valueOf(input.getText()).length() > 1) {
                     String word = String.valueOf(input.getText()).substring(0, 1).toUpperCase() + String.valueOf(input.getText()).substring(1).toLowerCase();
                     insertWord(new Word(word), mAdapter);
-                }else if (String.valueOf(input.getText()).length() == 1) {
+                } else if (String.valueOf(input.getText()).length() == 1) {
                     String word = String.valueOf(input.getText()).toUpperCase();
                     insertWord(new Word(word), mAdapter);
                 }
@@ -129,6 +137,49 @@ public class Dictionary extends AppCompatActivity {
         alert.show();
     }
 
+    private void createResetBdDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.reset_dialog);
+
+        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                insertDefaultWordList(defaultWordList, 1);
+            }
+        });
+        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private List<Word> createDefaultWordList() {
+        if (!defaultWordList.isEmpty()) {
+            defaultWordList.clear();
+        }
+        defaultWordList.add(new Word(getString(R.string.word1)));
+        defaultWordList.add(new Word(getString(R.string.word2)));
+        defaultWordList.add(new Word(getString(R.string.word3)));
+        defaultWordList.add(new Word(getString(R.string.word4)));
+        defaultWordList.add(new Word(getString(R.string.word5)));
+        defaultWordList.add(new Word(getString(R.string.word6)));
+        defaultWordList.add(new Word(getString(R.string.word7)));
+        defaultWordList.add(new Word(getString(R.string.word8)));
+        defaultWordList.add(new Word(getString(R.string.word9)));
+        defaultWordList.add(new Word(getString(R.string.word10)));
+        defaultWordList.add(new Word(getString(R.string.word11)));
+        defaultWordList.add(new Word(getString(R.string.word12)));
+        defaultWordList.add(new Word(getString(R.string.word13)));
+        defaultWordList.add(new Word(getString(R.string.word14)));
+        defaultWordList.add(new Word(getString(R.string.word15)));
+
+        return defaultWordList;
+    }
+
     private void insertWord(Word word, WordsAdapter mAdapter) {
         //Controlar que no se repita la palabra
         class InsertWord extends AsyncTask<Void, Void, Word> { // claseinterna
@@ -143,13 +194,38 @@ public class Dictionary extends AppCompatActivity {
             @Override
             protected void onPostExecute(Word word) {
                 super.onPostExecute(word);// Actualizar la UI
-                mAdapter.addWord(word.getWord());
+                showCurrentWords(mAdapter);
             }
         }
         InsertWord gf = new InsertWord(); // Crear una instancia y ejecutar
         gf.execute();
     }
 
+    private void insertDefaultWordList(List<Word> wordList, int reset) {
+        class InsertWordList extends AsyncTask<Void, Void, List<Word>> {
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                if(reset == 1) {
+                    WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
+                }
+
+                //Permite que cada vez que entremos no diccionario e eesteña vacío nos meta as palabras novamente
+                //Con isto conseguimos ter sempre palabras dentro da BBDD, que nos aforrará problemas no futuro
+                if(WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords().isEmpty()) {
+                    WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWordList(wordList);
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                super.onPostExecute(words);
+                showCurrentWords(mAdapter);
+            }
+        }
+        InsertWordList gf = new InsertWordList(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
 
     private void removeWord(WordsAdapter mAdapter, int pos) {
         class RemoveWord extends AsyncTask<Void, Void, Word> { // claseinterna
@@ -183,6 +259,7 @@ public class Dictionary extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
+                mAdapter.removeWords();
                 for (int i = 0; i < words.size(); i++)
                     mAdapter.addWord(words.get(i).getWord());
             }

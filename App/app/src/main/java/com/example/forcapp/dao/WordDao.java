@@ -16,6 +16,8 @@ public interface WordDao {
     //Insert word into Local database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWord(Word words);
+    @Insert
+    void insertWordList(List<Word> wordList);
 
     //Delete word from local database
     @Delete
@@ -37,5 +39,8 @@ public interface WordDao {
 
     @Query("DELETE FROM words WHERE word LIKE :name")
     void deleteWordByName(String name);
+
+    @Query("DELETE FROM words")
+    void deleteAllWords();
 
 }

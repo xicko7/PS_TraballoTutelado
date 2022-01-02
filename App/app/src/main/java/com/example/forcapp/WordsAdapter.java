@@ -70,6 +70,11 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.MyViewHolder
         notifyDataSetChanged();
     }
 
+    void removeWords(){
+        mDataset.clear();
+        notifyDataSetChanged();
+    }
+
     void addWord(String text){
             Word word = new Word(text);
             mDataset.add(word);
