@@ -1,24 +1,24 @@
 package com.example.forcapp;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.forcapp.database.WordDatabase;
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Dictionary extends AppCompatActivity {
@@ -26,7 +26,6 @@ public class Dictionary extends AppCompatActivity {
     RecyclerView recyclerView;
     Button add, back;
     private WordsAdapter mAdapter;
-    int added;
     ArrayList<Word> initialData = new ArrayList<>();
 
     @Override
@@ -35,16 +34,15 @@ public class Dictionary extends AppCompatActivity {
         setContentView(R.layout.dictionary_layout);
         getSupportActionBar().hide();
 
-//        Engadir primeiros elementos
-        for (int i = 0; i < 10; i++)
-            initialData.add(new Word(Integer.toString(i)));
-
+        // Engadir as palabras por defecto da app
         setUI();
+
+        // Engadir palabras da base de datos
+        showCurrentWords(mAdapter);
 
     }
 
     private void setUI() {
-
 
         recyclerView = findViewById(R.id.word_rv);
         add = findViewById(R.id.button_addWord);
@@ -59,8 +57,7 @@ public class Dictionary extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent menuIntent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(menuIntent);
+                finish();
             }
         });
 
@@ -93,15 +90,19 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getApplicationContext(), R.string.dialogOK, Toast.LENGTH_SHORT).show();
-                mAdapter.addWord(String.valueOf(input.getText()));
-                insertWord(new Word(input.getText().toString()));
+                if (String.valueOf(input.getText()).length() > 1) {
+                    String word = String.valueOf(input.getText()).substring(0, 1).toUpperCase() + String.valueOf(input.getText()).substring(1).toLowerCase();
+                    insertWord(new Word(word), mAdapter);
+                }else if (String.valueOf(input.getText()).length() == 1) {
+                    String word = String.valueOf(input.getText()).toUpperCase();
+                    insertWord(new Word(word), mAdapter);
+                }
             }
         });
         builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Toast.makeText(getApplicationContext(), R.string.dialogCancel, Toast.LENGTH_SHORT).show();
+                // Cancelar
             }
         });
         AlertDialog alert = builder.create();
@@ -115,33 +116,78 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                mAdapter.removeWord(position);
+                removeWord(mAdapter, position);
             }
         });
         builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
-    private void insertWord(Word word) {
+    private void insertWord(Word word, WordsAdapter mAdapter) {
         //Controlar que no se repita la palabra
-        class GetArticles extends AsyncTask<Void, Void, Word> { // claseinterna
+        class InsertWord extends AsyncTask<Void, Void, Word> { // claseinterna
             @Override
             protected Word doInBackground(Void... voids) {
-                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWord(word);
-                return null;
+                int finded = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().existsWord(word.getWord());
+                if (finded == 0)
+                    WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWord(word);
+                return word;
             }
 
             @Override
             protected void onPostExecute(Word word) {
                 super.onPostExecute(word);// Actualizar la UI
+                mAdapter.addWord(word.getWord());
             }
         }
-        GetArticles gf = new GetArticles(); // Crear una instancia y ejecutar
+        InsertWord gf = new InsertWord(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
+
+
+    private void removeWord(WordsAdapter mAdapter, int pos) {
+        class RemoveWord extends AsyncTask<Void, Void, Word> { // claseinterna
+            @Override
+            protected Word doInBackground(Void... voids) {
+                // Controlar que non se repita a palabra (aforrar dependencias co recyclerView
+                Word removed = mAdapter.getWord(pos);
+                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteWordByName(mAdapter.getWord(pos).getWord());
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Word word) {
+                super.onPostExecute(word); // Actualizar la UI
+                mAdapter.removeWord(pos);
+            }
+        }
+        RemoveWord gf = new RemoveWord(); // Crear una instancia y ejecutar
+        gf.execute();
+
+    }
+
+    private void showCurrentWords(WordsAdapter mAdapter) {
+        class GetAllWords extends AsyncTask<Void, Void, List<Word>> { // claseinterna
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
+                return words;
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                super.onPostExecute(words); // Actualizar la UI
+                for (int i = 0; i < words.size(); i++)
+                    mAdapter.addWord(words.get(i).getWord());
+            }
+        }
+        GetAllWords gf = new GetAllWords(); // Crear una instancia y ejecutar
         gf.execute();
     }
 

@@ -14,7 +14,7 @@ public class WordAPIImpl implements WordAPI {
     }
 
     @Override
-    public Word findWordById(Long wordId) {
+    public Word findWordById(Integer wordId) {
         return dao.getWord(wordId);
     }
 

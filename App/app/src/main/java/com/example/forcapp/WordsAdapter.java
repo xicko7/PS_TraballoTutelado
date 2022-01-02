@@ -16,7 +16,6 @@ import java.util.ArrayList;
 public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.MyViewHolder> {
     private final ArrayList<Word> mDataset;
     private static OnItemClickListener clickListener;
-    String palabra;
 
     public WordsAdapter(ArrayList<Word> myDataset) {
         mDataset = myDataset;

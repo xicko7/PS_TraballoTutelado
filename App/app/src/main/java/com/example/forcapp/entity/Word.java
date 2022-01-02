@@ -7,11 +7,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity(tableName = "words")
 public class Word{
 
     @PrimaryKey(autoGenerate = true)
-    Long id;
+    Integer id;
 
     @ColumnInfo(name = "word")
     String word;
@@ -20,7 +22,7 @@ public class Word{
         this.word = word;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 

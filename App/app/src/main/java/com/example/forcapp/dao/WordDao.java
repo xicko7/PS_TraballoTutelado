@@ -15,17 +15,27 @@ public interface WordDao {
 
     //Insert word into Local database
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertWord(Word... words);
+    void insertWord(Word words);
 
     //Delete word from local database
     @Delete
-    void deleteWord(Word... words);
+    void deleteWord(Word words);
 
     //Query
     @Query("SELECT word FROM words WHERE id LIKE :id")
-    Word getWord(Long id);
+    Word getWord(Integer id);
 
     @Query("SELECT word FROM words")
     List<Word> getAllWords();
+
+    //Search any word
+    @Query("SELECT count(word) FROM words  WHERE word LIKE :name")
+    int existsWord(String name);
+
+    @Query("SELECT word FROM words  WHERE word LIKE :name")
+    Word findWordByName(String name);
+
+    @Query("DELETE FROM words WHERE word LIKE :name")
+    void deleteWordByName(String name);
 
 }

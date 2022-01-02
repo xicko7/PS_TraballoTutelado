@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface WordAPI {
 
-    Word findWordById(Long wordId);
+    Word findWordById(Integer wordId);
 
     void insertWord(Word word);
 
