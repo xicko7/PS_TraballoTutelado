@@ -3,7 +3,37 @@
     <string name="title_app">ForcApp</string>
     <string name="singleplayer_bt">Singleplayer</string>
     <string name="multiplayer_bt">Multiplayer</string>
-    <string name="diccionario_bt">Diccionario</string>
-    <string name="title_diccionario">Diccionario</string>
-    <string name="addWord">Añadir palabra</string>
+    <string name="diccionario_bt">Dicionario</string>
+    <string name="title_dicionario">Dicionario</string>
+    <string name="addWord">Engadir palabra</string>
+    <string name="remove">Toca para eliminar</string>
+    <string name="dialogOK">Aceptar</string>
+    <string name="dialogCancel">Cancelar</string>
+    <string name="add_dialog">Engadir nova palabra</string>
+    <string name="KEY_TEXT_REMOVE">remove</string>
+    <string name="remove_dialog">Seguro que desexa eliminar?</string>
+    <string name="reset_dialog">Seguro que desexa resetear a BBDD?</string>
+    <string name="dialogAcept">Aceptar</string>
+    <string name="refreshBd">Actualizar</string>
+
+
+<!--    Default words-->
+
+    <string name="word1">Lonxano</string>
+    <string name="word2">Alimento</string>
+    <string name="word3">Sede</string>
+    <string name="word4">Achegar</string>
+    <string name="word5">Sinal</string>
+    <string name="word6">Sanción</string>
+    <string name="word7">Etapa</string>
+    <string name="word8">Terzo</string>
+    <string name="word9">Cóbado</string>
+    <string name="word10">Resumo</string>
+    <string name="word11">Pau</string>
+    <string name="word12">Protesta</string>
+    <string name="word13">Verán</string>
+    <string name="word14">Dotar</string>
+    <string name="word15">Freno</string>
+    <string name="reset">RESET</string>
+
 </resources>
