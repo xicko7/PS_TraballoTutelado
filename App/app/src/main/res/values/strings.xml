@@ -17,22 +17,23 @@
     <string name="refreshBd">Actualizar</string>
 
 
-    //Default words
+<!--    Default words-->
 
-    <string name="word1">alejado</string>
-    <string name="word2">alimento</string>
-    <string name="word3">sed</string>
-    <string name="word4">acercar</string>
-    <string name="word5">seña</string>
-    <string name="word6">sanción</string>
-    <string name="word7">etapa</string>
-    <string name="word8">tercio</string>
-    <string name="word9">cordillera</string>
-    <string name="word10">resumen</string>
-    <string name="word11">palo</string>
-    <string name="word12">protesta</string>
-    <string name="word13">verano</string>
-    <string name="word14">dotar</string>
-    <string name="word15">freno</string>
+    <string name="word1">Lonxano</string>
+    <string name="word2">Alimento</string>
+    <string name="word3">Sede</string>
+    <string name="word4">Achegar</string>
+    <string name="word5">Sinal</string>
+    <string name="word6">Sanción</string>
+    <string name="word7">Etapa</string>
+    <string name="word8">Terzo</string>
+    <string name="word9">Cóbado</string>
+    <string name="word10">Resumo</string>
+    <string name="word11">Pau</string>
+    <string name="word12">Protesta</string>
+    <string name="word13">Verán</string>
+    <string name="word14">Dotar</string>
+    <string name="word15">Freno</string>
+    <string name="reset">RESET</string>
 
 </resources>

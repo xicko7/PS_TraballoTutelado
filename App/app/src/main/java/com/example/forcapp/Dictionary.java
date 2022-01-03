@@ -209,7 +209,7 @@ public class Dictionary extends AppCompatActivity {
                     WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
                 }
 
-                //Permite que cada vez que entremos no diccionario e eesteña vacío nos meta as palabras novamente
+                //Permite que cada vez que entremos no dicionario e esté baleiro meta as palabras novamente
                 //Con isto conseguimos ter sempre palabras dentro da BBDD, que nos aforrará problemas no futuro
                 if(WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords().isEmpty()) {
                     WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWordList(wordList);
