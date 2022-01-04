@@ -17,7 +17,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:text="@string/title_app"
-        android:textColor="@color/white"
         android:textSize="50dp"
         android:textStyle="bold"/>
 
@@ -39,6 +38,7 @@
         android:layout_above="@+id/multiplayer_bt"
         android:layout_centerHorizontal="true"
         android:text="@string/singleplayer_bt"
+        android:backgroundTint="@color/iconColor2"
         />
 
     <Button
@@ -47,7 +47,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginVertical="20dp"
-        android:text="@string/multiplayer_bt" />
+        android:text="@string/multiplayer_bt"
+        android:backgroundTint="@color/iconColor2"/>
 
     <Button
         android:id="@+id/diccionario_bt"
@@ -55,7 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/multiplayer_bt"
         android:layout_centerHorizontal="true"
-        android:text="@string/diccionario_bt" />
+        android:text="@string/diccionario_bt"
+        android:backgroundTint="@color/iconColor2"/>
 
 
 </RelativeLayout>

@@ -16,7 +16,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginVertical="15dp"
+        android:layout_marginHorizontal="15dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/word_rv"

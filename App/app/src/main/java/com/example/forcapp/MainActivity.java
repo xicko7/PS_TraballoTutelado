@@ -1,12 +1,15 @@
 package com.example.forcapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
@@ -18,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button dictionaryButton;
     Button singleplayerButton;
+    TextView title_tv;
     List<Word> defaultWordList = new ArrayList<>();
 
     @Override
@@ -71,6 +75,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(singleplayerIntent);
             }
         });
+
+        title_tv = findViewById(R.id.title_tv);
+        title_tv.setTextColor(getResources().getColor(R.color.iconColor1));
+
+        Shader textShader = new LinearGradient(0, 0, title_tv.getPaint().measureText(title_tv.getText().toString()), title_tv.getTextSize(),
+                new int[]{getResources().getColor(R.color.iconColor1),getResources().getColor(R.color.iconColor2) ,getResources().getColor(R.color.iconColor3)},
+                new float[]{0, 1,2}, Shader.TileMode.CLAMP);
+
+        title_tv.getPaint().setShader(textShader);
+
 
     }
 

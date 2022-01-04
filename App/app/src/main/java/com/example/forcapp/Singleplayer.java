@@ -99,11 +99,12 @@ public class Singleplayer extends AppCompatActivity {
                 for (int i = 0; i < randomWord.length(); i++) {
                     charViews.add(new TextView(getApplicationContext()));
                     charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
-                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)));
+                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)).toUpperCase());
 
                     charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     charViews.get(i).setGravity(Gravity.CENTER);
                     charViews.get(i).setTextColor(Color.WHITE);
+                    charViews.get(i).setTextSize(25);
                     wordLayout.addView(charViews.get(i));
                 }
                 Toast.makeText(getApplicationContext(), randomWord, Toast.LENGTH_SHORT).show();

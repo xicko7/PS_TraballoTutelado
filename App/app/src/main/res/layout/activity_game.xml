@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="325dp"
-        android:background="#957DAD"
+        android:background="#e75b7d"
         android:gravity="center">
 
 
@@ -161,12 +161,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:background="@android:color/black"
+        android:background="@color/backgroundColor"
         android:horizontalSpacing="5dp"
-        android:numColumns="7"
+        android:numColumns="5"
         android:padding="5dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp" />
+        android:verticalSpacing="5dp"/>
 
 
 </LinearLayout>
