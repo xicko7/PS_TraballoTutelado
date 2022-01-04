@@ -1,6 +1,8 @@
 package com.example.forcapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.database.WordDatabaseClient;
@@ -25,7 +28,7 @@ public class Singleplayer extends AppCompatActivity {
     private LetterAdapter adapter;
     private GridView gridView;
     private List<ImageView> faults = new ArrayList();
-    private int intentos = 0;
+    private int intentos;
     private String randomWord;
 
     @Override
@@ -33,6 +36,9 @@ public class Singleplayer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
+
+        intentos = 0;
+
         gridView = findViewById(R.id.letters);
         adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
@@ -143,12 +149,37 @@ public class Singleplayer extends AppCompatActivity {
             view.setEnabled(false);
             view.setVisibility(View.GONE);
 
-            if (intentos < 11) {
+            if (intentos < 10) {
                 faults.get(intentos).setVisibility(View.VISIBLE);
                 intentos++;
+            }else{
+                faults.get(intentos).setVisibility(View.VISIBLE);
+                createGameOverDialog();
             }
         }
 
+    }
+
+    private void createGameOverDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.gameOver);
+
+        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
 }

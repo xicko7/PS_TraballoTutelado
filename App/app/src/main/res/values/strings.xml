@@ -34,5 +34,8 @@
     <string name="word13">Verán</string>
     <string name="word14">Dotar</string>
     <string name="word15">Freno</string>
+    <string name="gameOver">Perdiches...</string>
+    <string name="exit">Saír</string>
+    <string name="new_game">Nova partida</string>
 
 </resources>
