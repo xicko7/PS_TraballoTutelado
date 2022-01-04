@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
 
-import org.w3c.dom.Text;
-
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,23 +35,26 @@ public class Singleplayer extends AppCompatActivity {
     private List<ImageView> faults = new ArrayList();
     private int intentos;
     private String randomWord;
-    private List<TextView>  charViews = new ArrayList();
+    private List<TextView> charViews = new ArrayList();
     private LinearLayout wordLayout;
+    private int numCorrectos;
+    private Collator myColaltor = Collator.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_game);
+        getSupportActionBar().setTitle(R.string.singleplayer_bt);
 
         intentos = 0;
-
+        numCorrectos = 0;
+        myColaltor.setStrength(Collator.PRIMARY);
         gridView = findViewById(R.id.letters);
         adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
         wordLayout = findViewById(R.id.Layour_words);
         getRandomWord();
-
         setUI();
     }
 
@@ -93,18 +94,16 @@ public class Singleplayer extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
-                randomWord =words.get(getRandomNumber(0, words.size() - 1)).getWord();
+                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
 
-                for (int i = 0; i<randomWord.length(); i++){
+                for (int i = 0; i < randomWord.length(); i++) {
                     charViews.add(new TextView(getApplicationContext()));
-                    Log.d("Prueba", randomWord);
                     charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
+                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)));
 
-                    /*charViews.get(i).setText(randomWord.charAt(i));
-                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT ));
+                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     charViews.get(i).setGravity(Gravity.CENTER);
                     charViews.get(i).setTextColor(Color.WHITE);
-                    */
                     wordLayout.addView(charViews.get(i));
                 }
                 Toast.makeText(getApplicationContext(), randomWord, Toast.LENGTH_SHORT).show();
@@ -160,7 +159,11 @@ public class Singleplayer extends AppCompatActivity {
             buttonLetter.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    tapLetter(letters[i], view);
+                    if (numCorrectos != randomWord.length()) {
+                        tapLetter(letters[i], view);
+                    } else {
+                        createWinnerDialog();
+                    }
                 }
             });
             buttonLetter.setText(letters[i]);
@@ -168,16 +171,34 @@ public class Singleplayer extends AppCompatActivity {
         }
 
         void tapLetter(String letter, View view) {
-            Toast.makeText(getApplicationContext(), "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
             view.setEnabled(false);
             view.setVisibility(View.GONE);
 
-            if (intentos < 10) {
+            boolean correcto = false;
+
+
+            for (int i = 0; i < randomWord.length(); i++) {
+                if (myColaltor.equals(charViews.get(i).getText().toString(), letter)) {
+                    correcto = true;
+                    numCorrectos++;
+                    charViews.get(i).setTextColor(Color.BLACK);
+                }
+            }
+
+            if (correcto) {
+                if (numCorrectos == randomWord.length()) {
+                    disableButtons();
+                    createWinnerDialog();
+                }
+            } else if (intentos < 10) {
                 faults.get(intentos).setVisibility(View.VISIBLE);
                 intentos++;
-            }else{
+            } else {
                 faults.get(intentos).setVisibility(View.VISIBLE);
+                disableButtons();
                 createGameOverDialog();
+
             }
         }
 
@@ -203,6 +224,37 @@ public class Singleplayer extends AppCompatActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private void createWinnerDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.gameWinner);
+        builder.setMessage(getString(R.string.gameWinnerMessage) + ": " + randomWord);
+
+        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    private void disableButtons() {
+        for (int i = 0; i < gridView.getChildCount(); i++) {
+            gridView.getChildAt(i).setEnabled(false);
+
+        }
     }
 
 }

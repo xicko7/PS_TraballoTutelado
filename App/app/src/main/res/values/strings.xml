@@ -35,6 +35,8 @@
     <string name="word14">Dotar</string>
     <string name="word15">Freno</string>
     <string name="gameOver">Perdiches...</string>
+    <string name="gameWinner">Parabéns, gañaches!</string>
+    <string name="gameWinnerMessage">A palabra era</string>
     <string name="exit">Saír</string>
     <string name="new_game">Nova partida</string>
 
