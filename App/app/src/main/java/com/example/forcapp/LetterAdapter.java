@@ -57,10 +57,8 @@ public class LetterAdapter extends BaseAdapter {
     }
 
     void tapLetter(String letter, View view) {
-        // Función executada ao pulsar o botón
-        Toast.makeText(context, "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
-        view.setEnabled(false);
-        //Comprobar si la letrá está en la palabra
-
+            Toast.makeText(context, "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
+            view.setEnabled(false);
+            view.setVisibility(View.GONE);
     }
 }

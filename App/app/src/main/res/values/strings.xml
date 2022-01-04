@@ -15,7 +15,7 @@
     <string name="reset_dialog">Seguro que desexa resetear a BBDD?</string>
     <string name="dialogAcept">Aceptar</string>
     <string name="refreshBd">Actualizar</string>
-
+    <string name="reset">Restablecer valores por defecto</string>
 
 <!--    Default words-->
 
@@ -34,6 +34,5 @@
     <string name="word13">Verán</string>
     <string name="word14">Dotar</string>
     <string name="word15">Freno</string>
-    <string name="reset">Restablecer valores por defecto</string>
 
 </resources>
