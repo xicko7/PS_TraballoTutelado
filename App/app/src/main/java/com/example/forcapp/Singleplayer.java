@@ -3,17 +3,22 @@ package com.example.forcapp;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Singleplayer extends AppCompatActivity {
 
     private LetterAdapter adapter;
     private GridView gridView;
+    static List<ImageView> faults = new ArrayList();
+    static int intentos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,9 +49,21 @@ public class Singleplayer extends AppCompatActivity {
         ids.add(R.id.fault11);
 
         for (int i = 0; i < ids.size(); i++) {
-
             ImageView imageViewIcon = findViewById(ids.get(i));
             imageViewIcon.setColorFilter(getApplicationContext().getResources().getColor(R.color.white));
+
+            faults.add(imageViewIcon);
+
         }
+    }
+
+    static void tapLetter(String letter, View view) {
+        Toast.makeText(view.getContext(), "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
+        view.setEnabled(false);
+        view.setVisibility(View.GONE);
+
+        faults.get(intentos).setVisibility(View.VISIBLE);
+        intentos++;
+
     }
 }

@@ -22,7 +22,7 @@
             android:layout_height="300dp"
             android:layout_marginTop="108dp"
             android:layout_marginEnd="192dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/fault3" />
@@ -33,7 +33,7 @@
             android:layout_height="259dp"
             android:layout_marginTop="19dp"
             android:layout_marginEnd="167dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/fault2" />
@@ -44,7 +44,7 @@
             android:layout_height="77dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="125dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/fault3" />
@@ -55,7 +55,7 @@
             android:layout_height="77dp"
             android:layout_marginTop="18dp"
             android:layout_marginEnd="220dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/fault4" />
@@ -66,7 +66,7 @@
             android:layout_height="36dp"
             android:layout_marginTop="43dp"
             android:layout_marginEnd="122dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/body" />
@@ -77,7 +77,7 @@
             android:layout_height="41dp"
             android:layout_marginTop="79dp"
             android:layout_marginEnd="140dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/head" />
@@ -88,7 +88,7 @@
             android:layout_height="184dp"
             android:layout_marginTop="59dp"
             android:layout_marginEnd="161dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/body" />
@@ -99,7 +99,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="135dp"
             android:layout_marginEnd="160dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/arm_left" />
@@ -110,7 +110,7 @@
             android:layout_height="24dp"
             android:layout_marginTop="135dp"
             android:layout_marginEnd="135dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/arm_right" />
@@ -123,7 +123,7 @@
             android:layout_marginEnd="162dp"
             android:foregroundTint="#000000"
             android:tintMode="src_in"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/leg_left"
@@ -137,7 +137,7 @@
             android:layout_marginEnd="137dp"
             android:foregroundTint="#000000"
             android:foregroundTintMode="add"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/leg_right"
