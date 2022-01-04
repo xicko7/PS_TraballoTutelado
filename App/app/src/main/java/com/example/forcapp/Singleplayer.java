@@ -3,8 +3,11 @@ package com.example.forcapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -19,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,8 @@ public class Singleplayer extends AppCompatActivity {
     private List<ImageView> faults = new ArrayList();
     private int intentos;
     private String randomWord;
+    private List<TextView>  charViews = new ArrayList();
+    private LinearLayout wordLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,7 @@ public class Singleplayer extends AppCompatActivity {
         gridView = findViewById(R.id.letters);
         adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
+        wordLayout = findViewById(R.id.Layour_words);
         getRandomWord();
 
         setUI();
@@ -83,7 +93,20 @@ public class Singleplayer extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
-                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
+                randomWord =words.get(getRandomNumber(0, words.size() - 1)).getWord();
+
+                for (int i = 0; i<randomWord.length(); i++){
+                    charViews.add(new TextView(getApplicationContext()));
+                    Log.d("Prueba", randomWord);
+                    charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
+
+                    /*charViews.get(i).setText(randomWord.charAt(i));
+                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT ));
+                    charViews.get(i).setGravity(Gravity.CENTER);
+                    charViews.get(i).setTextColor(Color.WHITE);
+                    */
+                    wordLayout.addView(charViews.get(i));
+                }
                 Toast.makeText(getApplicationContext(), randomWord, Toast.LENGTH_SHORT).show();
             }
         }
