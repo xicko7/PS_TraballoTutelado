@@ -18,7 +18,7 @@
         android:layout_marginTop="10dp"
         android:text="@string/title_app"
         android:textColor="@color/white"
-        android:textSize="34dp"
+        android:textSize="50dp"
         android:textStyle="bold"/>
 
     <ImageView
@@ -26,7 +26,7 @@
         android:layout_height="100dp"
         android:id="@+id/image_title_iv"
         android:src="@drawable/icon"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="50dp"
         android:layout_below="@id/title_tv"
         android:layout_centerHorizontal="true"
         />
