@@ -49,15 +49,18 @@ public class LetterAdapter extends BaseAdapter {
         buttonLetter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tapLetter(letters[i]);
+                tapLetter(letters[i], view);
             }
         });
         buttonLetter.setText(letters[i]);
         return buttonLetter;
     }
 
-    void tapLetter(String letter) {
+    void tapLetter(String letter, View view) {
         // Función executada ao pulsar o botón
         Toast.makeText(context, "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
+        view.setEnabled(false);
+        //Comprobar si la letrá está en la palabra
+
     }
 }
