@@ -3,11 +3,15 @@ package com.example.forcapp;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,19 +28,40 @@ public class Dictionary extends AppCompatActivity {
 
     List<Word> defaultWordList = new ArrayList<>();
     RecyclerView recyclerView;
-    Button add, back, resetBD;
     private WordsAdapter mAdapter;
     ArrayList<Word> initialData = new ArrayList<>();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_layout, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.añadir_menu:
+                createAddDialog(mAdapter);
+                return true;
+            case R.id.reset_menu:
+                createResetBdDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dictionary_layout);
-        getSupportActionBar().hide();
+        getSupportActionBar().setTitle(R.string.diccionario_bt);
 
         // Engadir as palabras por defecto da app
         setUI();
-        insertDefaultWordList(createDefaultWordList(),0);
+        insertDefaultWordList(createDefaultWordList(), 0);
 
 
 
@@ -45,9 +70,7 @@ public class Dictionary extends AppCompatActivity {
     private void setUI() {
 
         recyclerView = findViewById(R.id.word_rv);
-        add = findViewById(R.id.button_addWord);
-        back = findViewById(R.id.dictionary_back_button);
-        resetBD = findViewById(R.id.reset_bd_bt);
+
 
         mAdapter = new WordsAdapter(initialData);
         LinearLayoutManager linearLayoutManager =
@@ -55,12 +78,6 @@ public class Dictionary extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(mAdapter);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         mAdapter.setClickListener(new WordsAdapter.OnItemClickListener() {
             @Override
@@ -69,19 +86,6 @@ public class Dictionary extends AppCompatActivity {
             }
         });
 
-        add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createAddDialog(mAdapter);
-            }
-        });
-
-        resetBD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createResetBdDialog();
-            }
-        });
 
     }
 
@@ -205,13 +209,13 @@ public class Dictionary extends AppCompatActivity {
         class InsertWordList extends AsyncTask<Void, Void, List<Word>> {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                if(reset == 1) {
+                if (reset == 1) {
                     WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
                 }
 
                 //Permite que cada vez que entremos no dicionario e esté baleiro meta as palabras novamente
                 //Con isto conseguimos ter sempre palabras dentro da BBDD, que nos aforrará problemas no futuro
-                if(WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords().isEmpty()) {
+                if (WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords().isEmpty()) {
                     WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().insertWordList(wordList);
                 }
                 return null;
