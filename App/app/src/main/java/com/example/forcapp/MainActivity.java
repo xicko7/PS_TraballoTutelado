@@ -2,7 +2,6 @@ package com.example.forcapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,12 +10,13 @@ import android.widget.Button;
 public class MainActivity extends AppCompatActivity {
 
     Button dictionaryButton;
+    Button singleplayerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        setContentView(R.layout.activity_main);
 
         setUI();
 
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUI() {
         dictionaryButton = findViewById(R.id.diccionario_bt);
-
         dictionaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,5 +32,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        singleplayerButton = findViewById(R.id.singleplayer_bt);
+        singleplayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent singleplayerIntent = new Intent(getApplicationContext(), Singleplayer.class);
+                startActivity(singleplayerIntent);
+            }
+        });
+
     }
+
 }

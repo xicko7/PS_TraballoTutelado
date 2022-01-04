@@ -25,6 +25,14 @@
             android:parentActivityName=".MainActivity">
         </activity>
 
+
+        <activity
+            android:name=".Singleplayer"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>
