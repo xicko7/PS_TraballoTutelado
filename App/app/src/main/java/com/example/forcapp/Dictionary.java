@@ -34,6 +34,20 @@ public class Dictionary extends AppCompatActivity {
     ArrayList<Word> initialData = new ArrayList<>();
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dictionary_layout);
+        getSupportActionBar().setTitle(R.string.diccionario_bt);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+        // Engadir as palabras por defecto da app
+        setUI();
+        insertDefaultWordList(createDefaultWordList(), 0);
+
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_layout, menu);
@@ -49,25 +63,16 @@ public class Dictionary extends AppCompatActivity {
             case R.id.reset_menu:
                 createResetBdDialog();
                 return true;
+            case R.id.deleteall_menu:
+                createDeleteAllDialog();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.dictionary_layout);
-        getSupportActionBar().setTitle(R.string.diccionario_bt);
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
-        // Engadir as palabras por defecto da app
-        setUI();
-        insertDefaultWordList(createDefaultWordList(), 0);
-
-
-    }
 
     private void setUI() {
 
@@ -106,6 +111,10 @@ public class Dictionary extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 String avaliableLetters = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNMáÁéÉíÍóÓúÚ";
                 String newWord = String.valueOf(input.getText());
+                if (newWord.length()>17){
+                    Toast.makeText(getApplicationContext(), "Palabra demasiado longa.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 boolean avaliable = true;
                 // Comprobar que non hai espazos
                 for(int j = 0; j < newWord.length(); j++){
@@ -278,6 +287,44 @@ public class Dictionary extends AppCompatActivity {
             }
         }
         GetAllWords gf = new GetAllWords(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
+
+    private void createDeleteAllDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.deleteall_dialog);
+
+        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteAllWords();
+            }
+        });
+        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void deleteAllWords() {
+        class DeleteAllWords extends AsyncTask<Void, Void, Word> { // claseinterna
+            @Override
+            protected Word doInBackground(Void... voids) {
+                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Word word) {
+                super.onPostExecute(word); // Actualizar la UI
+                mAdapter.removeWords();
+            }
+        }
+        DeleteAllWords gf = new DeleteAllWords(); // Crear una instancia y ejecutar
         gf.execute();
     }
 
