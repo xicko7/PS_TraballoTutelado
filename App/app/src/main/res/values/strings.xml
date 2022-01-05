@@ -1,8 +1,28 @@
 <resources>
+    <!--    Default words-->
+
+    <string name="word1">LONXANO</string>
+    <string name="word2">ALIMENTO</string>
+    <string name="word3">SEDE</string>
+    <string name="word4">ACHEGAR</string>
+    <string name="word5">SINAL</string>
+    <string name="word6">SANCIÓN</string>
+    <string name="word7">ETAPA</string>
+    <string name="word8">TERZO</string>
+    <string name="word9">CÓBADO</string>
+    <string name="word10">RESUMO</string>
+    <string name="word11">PAU</string>
+    <string name="word12">PROTESTA</string>
+    <string name="word13">VERÁN</string>
+    <string name="word14">DOTAR</string>
+    <string name="word15">FRENO</string>
+
+
+
     <string name="app_name">ForcApp</string>
     <string name="title_app">ForcApp</string>
-    <string name="singleplayer_bt">Singleplayer</string>
-    <string name="multiplayer_bt">Multiplayer</string>
+    <string name="singleplayer_bt">Un xogador</string>
+    <string name="multiplayer_bt">Multixogador</string>
     <string name="diccionario_bt">Dicionario</string>
     <string name="title_dicionario">Dicionario</string>
     <string name="addWord">Engadir palabra</string>
@@ -16,24 +36,6 @@
     <string name="dialogAcept">Aceptar</string>
     <string name="refreshBd">Actualizar</string>
     <string name="reset">Restablecer valores por defecto</string>
-
-<!--    Default words-->
-
-    <string name="word1">Lonxano</string>
-    <string name="word2">Alimento</string>
-    <string name="word3">Sede</string>
-    <string name="word4">Achegar</string>
-    <string name="word5">Sinal</string>
-    <string name="word6">Sanción</string>
-    <string name="word7">Etapa</string>
-    <string name="word8">Terzo</string>
-    <string name="word9">Cóbado</string>
-    <string name="word10">Resumo</string>
-    <string name="word11">Pau</string>
-    <string name="word12">Protesta</string>
-    <string name="word13">Verán</string>
-    <string name="word14">Dotar</string>
-    <string name="word15">Freno</string>
     <string name="gameOver">Perdiches...</string>
     <string name="gameWinner">Parabéns, gañaches!</string>
     <string name="gameWinnerMessage">A palabra era</string>

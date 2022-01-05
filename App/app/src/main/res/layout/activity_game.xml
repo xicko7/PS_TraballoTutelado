@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".Singleplayer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="325dp"
-        android:background="#e75b7d"
+        android:background="@color/backgroundColor"
         android:gravity="center">
 
 
@@ -151,22 +151,22 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:background="@android:color/white"
+        android:forceDarkAllowed="false"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="30dp" />
+        android:padding="20dp"/>
 
     <GridView
         android:id="@+id/letters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="343dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
         android:background="@color/backgroundColor"
         android:horizontalSpacing="5dp"
         android:numColumns="5"
         android:padding="5dp"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"/>
+        android:verticalSpacing="5dp" />
 
 
 </LinearLayout>

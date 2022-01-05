@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,11 +60,11 @@ public class Dictionary extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dictionary_layout);
         getSupportActionBar().setTitle(R.string.diccionario_bt);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         // Engadir as palabras por defecto da app
         setUI();
         insertDefaultWordList(createDefaultWordList(), 0);
-
 
 
     }
@@ -102,11 +104,20 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (String.valueOf(input.getText()).length() > 1) {
-                    String word = String.valueOf(input.getText()).substring(0, 1).toUpperCase() + String.valueOf(input.getText()).substring(1).toLowerCase();
-                    insertWord(new Word(word), mAdapter);
-                } else if (String.valueOf(input.getText()).length() == 1) {
-                    String word = String.valueOf(input.getText()).toUpperCase();
+                String avaliableLetters = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNMáÁéÉíÍóÓúÚ";
+                String newWord = String.valueOf(input.getText());
+                boolean avaliable = true;
+                // Comprobar que non hai espazos
+                for(int j = 0; j < newWord.length(); j++){
+                    if(!avaliableLetters.contains(String.valueOf(newWord.charAt(j)))) {
+                        avaliable = false;
+                        Toast.makeText(getApplicationContext(), "Soamente se permiten letras. [A,Z]", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+
+                if (avaliable){
+                    String word = newWord.toUpperCase();
                     insertWord(new Word(word), mAdapter);
                 }
             }
@@ -235,8 +246,6 @@ public class Dictionary extends AppCompatActivity {
         class RemoveWord extends AsyncTask<Void, Void, Word> { // claseinterna
             @Override
             protected Word doInBackground(Void... voids) {
-                // Controlar que non se repita a palabra (aforrar dependencias co recyclerView
-                Word removed = mAdapter.getWord(pos);
                 WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteWordByName(mAdapter.getWord(pos).getWord());
                 return null;
             }
@@ -265,7 +274,7 @@ public class Dictionary extends AppCompatActivity {
                 super.onPostExecute(words); // Actualizar la UI
                 mAdapter.removeWords();
                 for (int i = 0; i < words.size(); i++)
-                    mAdapter.addWord(words.get(i).getWord());
+                    mAdapter.addWord(words.get(i).getWord().toUpperCase());
             }
         }
         GetAllWords gf = new GetAllWords(); // Crear una instancia y ejecutar
