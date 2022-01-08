@@ -36,7 +36,7 @@ public class Dictionary extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dictionary_layout);
-        getSupportActionBar().setTitle(R.string.diccionario_bt);
+        getSupportActionBar().setTitle(R.string.dicionario);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         // Engadir as palabras por defecto da app
@@ -98,6 +98,14 @@ public class Dictionary extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mAdapter.getItemCount() == 0)
+            createExitDialog(mAdapter);
+        else
+            finish();
     }
 
     private void insertWord(Word word, WordsAdapter mAdapter) {
@@ -250,12 +258,6 @@ public class Dictionary extends AppCompatActivity {
         gf.execute();
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mAdapter.getItemCount() == 0)
-            createExitDialog(mAdapter);
-    }
-
     private void createExitDialog(WordsAdapter mAdapter) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.exit_dictionary_dialog);
@@ -286,7 +288,7 @@ public class Dictionary extends AppCompatActivity {
         input.setLayoutParams(lp);
         builder.setView(input);
 
-        builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 String avaliableLetters = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNMáÁéÉíÍóÓúÚ";
@@ -311,7 +313,7 @@ public class Dictionary extends AppCompatActivity {
                 }
             }
         });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Cancelar
@@ -325,13 +327,13 @@ public class Dictionary extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.remove_dialog);
 
-        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 removeWord(mAdapter, position);
             }
         });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Cancelar
@@ -345,13 +347,13 @@ public class Dictionary extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.reset_dialog);
 
-        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 insertDefaultWordList(createDefaultWordList(), 1);
             }
         });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Cancelar
@@ -365,13 +367,13 @@ public class Dictionary extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.deleteall_dialog);
 
-        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 deleteAllWords();
             }
         });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Cancelar

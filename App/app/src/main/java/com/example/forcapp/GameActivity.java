@@ -16,6 +16,8 @@ public interface GameActivity {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
+    void createExitDialog();
+
     void createGameOverDialog();
 
     void createWinnerDialog();

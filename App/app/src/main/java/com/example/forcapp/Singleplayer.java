@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,7 +37,8 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     private final List<ImageView> faults = new ArrayList();
     private final List<TextView> charViews = new ArrayList();
     private LinearLayout wordLayout;
-    private final Collator myColaltor = Collator.getInstance();
+    private final Collator myCollator = Collator.getInstance();
+    private boolean gameFinished;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +48,13 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
 
         intentos = 0;
         numCorrectos = 0;
-        myColaltor.setStrength(Collator.PRIMARY);
+        myCollator.setStrength(Collator.PRIMARY);
         gridView = findViewById(R.id.letters);
         LetterAdapter adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
         wordLayout = findViewById(R.id.Layour_words);
         getRandomWord();
+        gameFinished = false;
         setUI();
     }
 
@@ -77,6 +81,31 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             faults.add(imageViewIcon);
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Respond to the action bar's Up/Home button
+                if (!gameFinished) {
+                    createExitDialog();
+                    return true;
+                } else
+                    return false;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!gameFinished)
+            createExitDialog();
+        else
+            finish();
     }
 
     private class LetterAdapter extends BaseAdapter {
@@ -139,7 +168,7 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
 
 
             for (int i = 0; i < randomWord.length(); i++) {
-                if (myColaltor.equals(charViews.get(i).getText().toString(), letter)) {
+                if (myCollator.equals(charViews.get(i).getText().toString(), letter)) {
                     correcto = true;
                     numCorrectos++;
                     charViews.get(i).setTextColor(Color.BLACK);
@@ -149,6 +178,7 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             if (correcto) {
                 if (numCorrectos == randomWord.length()) {
                     disableButtons();
+                    gameFinished = true;
                     createWinnerDialog();
                 }
             } else if (intentos < 10) {
@@ -157,6 +187,7 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             } else {
                 faults.get(intentos).setVisibility(View.VISIBLE);
                 disableButtons();
+                gameFinished = true;
                 createGameOverDialog();
 
             }
@@ -170,7 +201,7 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             @Override
             protected List<Word> doInBackground(Void... voids) {
                 List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
-                if(words.size() == 0){
+                if (words.size() == 0) {
                     words = Dictionary.defaulWordList;
                 }
                 return words;
@@ -209,9 +240,31 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     }
 
     @Override
+    public void createExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.exit) + "?");
+
+        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cont, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    @Override
     public void createGameOverDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.gameOver);
+        builder.setTitle(getString(R.string.game_over) + " " + getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
@@ -234,8 +287,8 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     @Override
     public void createWinnerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.gameWinner);
-        builder.setMessage(getString(R.string.gameWinnerMessage) + ": " + randomWord);
+        builder.setTitle(R.string.game_winner);
+        builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
@@ -255,7 +308,5 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         alert.show();
 
     }
-
-
 
 }

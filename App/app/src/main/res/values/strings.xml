@@ -41,28 +41,26 @@
 
 
     <string name="app_name">ForcApp</string>
-    <string name="title_app">ForcApp</string>
     <string name="singleplayer_bt">Un xogador</string>
     <string name="multiplayer_bt">Multixogador</string>
-    <string name="diccionario_bt">Dicionario</string>
-    <string name="title_dicionario">Dicionario</string>
+    <string name="dicionario">Dicionario</string>
     <string name="add_word">Engadir palabra</string>
     <string name="remove">Toca para eliminar</string>
-    <string name="dialogOK">Aceptar</string>
-    <string name="dialogCancel">Cancelar</string>
+    <string name="dialog_cancel">Cancelar</string>
     <string name="add_dialog">Engadir nova palabra</string>
     <string name="KEY_TEXT_REMOVE">remove</string>
     <string name="remove_dialog">Seguro que desexa eliminar?</string>
     <string name="reset_dialog">Seguro que desexa resetear a BBDD?</string>
-    <string name="dialogAcept">Aceptar</string>
-    <string name="refreshBd">Actualizar</string>
+    <string name="dialog_acept">Aceptar</string>
+    <string name="refresh_bd">Actualizar</string>
     <string name="reset">Restablecer valores por defecto</string>
-    <string name="gameOver">Perdiches...</string>
-    <string name="gameWinner">Parabéns, gañaches!</string>
-    <string name="gameWinnerMessage">A palabra era</string>
+    <string name="game_over">Perdiches...</string>
+    <string name="game_winner">Parabéns, gañaches!</string>
+    <string name="word_was">A palabra era:</string>
     <string name="exit">Saír</string>
     <string name="new_game">Nova partida</string>
     <string name="deleteall_dialog">Borrar tódalas palabras?</string>
     <string name="exit_dictionary_dialog">Non pode saír co dicionario baleiro.</string>
+    <string name="cont">Continuar</string>
 
 </resources>
