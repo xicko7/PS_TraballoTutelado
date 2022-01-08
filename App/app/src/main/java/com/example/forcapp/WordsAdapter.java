@@ -3,7 +3,6 @@ package com.example.forcapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.forcapp.entity.Word;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.MyViewHolder> {
     private final ArrayList<Word> mDataset;
@@ -80,6 +80,11 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.MyViewHolder
             mDataset.add(word);
             notifyItemInserted(mDataset.size() - 1);
      }
+
+    void addAll(List<Word> words){
+        mDataset.addAll(words);
+        notifyItemInserted(mDataset.size() - 1);
+    }
 
     Word getWord(int position){
         return mDataset.get(position);

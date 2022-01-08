@@ -15,6 +15,10 @@ public class Word{
     @PrimaryKey(autoGenerate = true)
     Integer id;
 
+    public void setWord(String word) {
+        this.word = word;
+    }
+
     @ColumnInfo(name = "word")
     String word;
 

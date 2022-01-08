@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,9 +27,9 @@ import java.util.List;
 
 public class Dictionary extends AppCompatActivity {
 
-    List<Word> defaultWordList = new ArrayList<>();
     RecyclerView recyclerView;
     private WordsAdapter mAdapter;
+    static List<Word> defaulWordList;
     ArrayList<Word> initialData = new ArrayList<>();
 
     @Override
@@ -42,37 +41,9 @@ public class Dictionary extends AppCompatActivity {
 
         // Engadir as palabras por defecto da app
         setUI();
-        insertDefaultWordList(createDefaultWordList(), 0);
-
-
+        defaulWordList = createDefaultWordList();
+        insertDefaultWordList(defaulWordList, 0);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_layout, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.añadir_menu:
-                createAddDialog(mAdapter);
-                return true;
-            case R.id.reset_menu:
-                createResetBdDialog();
-                return true;
-            case R.id.deleteall_menu:
-                createDeleteAllDialog();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-    }
-
-
 
     private void setUI() {
 
@@ -96,112 +67,37 @@ public class Dictionary extends AppCompatActivity {
 
     }
 
-    private void createAddDialog(WordsAdapter mAdapter) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.add_dialog);
-
-        EditText input = new EditText(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        builder.setView(input);
-
-        builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                String avaliableLetters = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNMáÁéÉíÍóÓúÚ";
-                String newWord = String.valueOf(input.getText());
-                if (newWord.length()>17){
-                    Toast.makeText(getApplicationContext(), "Palabra demasiado longa.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                boolean avaliable = true;
-                // Comprobar que non hai espazos
-                for(int j = 0; j < newWord.length(); j++){
-                    if(!avaliableLetters.contains(String.valueOf(newWord.charAt(j)))) {
-                        avaliable = false;
-                        Toast.makeText(getApplicationContext(), "Soamente se permiten letras. [A,Z]", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
-                }
-
-                if (avaliable){
-                    String word = newWord.toUpperCase();
-                    insertWord(new Word(word), mAdapter);
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Cancelar
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_layout, menu);
+        return true;
     }
 
-    private void createDeleteDialog(WordsAdapter mAdapter, int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.remove_dialog);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.añadir_menu:
+                createAddDialog(mAdapter);
+                return true;
+            case R.id.reset_menu:
+                createResetBdDialog();
+                return true;
+            case R.id.deleteall_menu:
+                createDeleteAllDialog();
+                return true;
+            case android.R.id.home:
+                // Respond to the action bar's Up/Home button
+                if (mAdapter.getItemCount() == 0) {
+                    createExitDialog(mAdapter);
+                    return true;
+                } else
+                    return false;
 
-        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                removeWord(mAdapter, position);
-            }
-        });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Cancelar
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void createResetBdDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.reset_dialog);
-
-        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                insertDefaultWordList(defaultWordList, 1);
-            }
-        });
-        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Cancelar
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private List<Word> createDefaultWordList() {
-        if (!defaultWordList.isEmpty()) {
-            defaultWordList.clear();
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        defaultWordList.add(new Word(getString(R.string.word1)));
-        defaultWordList.add(new Word(getString(R.string.word2)));
-        defaultWordList.add(new Word(getString(R.string.word3)));
-        defaultWordList.add(new Word(getString(R.string.word4)));
-        defaultWordList.add(new Word(getString(R.string.word5)));
-        defaultWordList.add(new Word(getString(R.string.word6)));
-        defaultWordList.add(new Word(getString(R.string.word7)));
-        defaultWordList.add(new Word(getString(R.string.word8)));
-        defaultWordList.add(new Word(getString(R.string.word9)));
-        defaultWordList.add(new Word(getString(R.string.word10)));
-        defaultWordList.add(new Word(getString(R.string.word11)));
-        defaultWordList.add(new Word(getString(R.string.word12)));
-        defaultWordList.add(new Word(getString(R.string.word13)));
-        defaultWordList.add(new Word(getString(R.string.word14)));
-        defaultWordList.add(new Word(getString(R.string.word15)));
 
-        return defaultWordList;
     }
 
     private void insertWord(Word word, WordsAdapter mAdapter) {
@@ -251,6 +147,53 @@ public class Dictionary extends AppCompatActivity {
         gf.execute();
     }
 
+    public List<Word> createDefaultWordList() {
+
+        List<Word> defaultWordList = new ArrayList<>();
+
+        if (!defaultWordList.isEmpty()) {
+            defaultWordList.clear();
+        }
+        defaultWordList.add(new Word(getString(R.string.word1)));
+        defaultWordList.add(new Word(getString(R.string.word2)));
+        defaultWordList.add(new Word(getString(R.string.word3)));
+        defaultWordList.add(new Word(getString(R.string.word4)));
+        defaultWordList.add(new Word(getString(R.string.word5)));
+        defaultWordList.add(new Word(getString(R.string.word6)));
+        defaultWordList.add(new Word(getString(R.string.word7)));
+        defaultWordList.add(new Word(getString(R.string.word8)));
+        defaultWordList.add(new Word(getString(R.string.word9)));
+        defaultWordList.add(new Word(getString(R.string.word10)));
+        defaultWordList.add(new Word(getString(R.string.word11)));
+        defaultWordList.add(new Word(getString(R.string.word12)));
+        defaultWordList.add(new Word(getString(R.string.word13)));
+        defaultWordList.add(new Word(getString(R.string.word14)));
+        defaultWordList.add(new Word(getString(R.string.word15)));
+        defaultWordList.add(new Word(getString(R.string.word16)));
+        defaultWordList.add(new Word(getString(R.string.word17)));
+        defaultWordList.add(new Word(getString(R.string.word18)));
+        defaultWordList.add(new Word(getString(R.string.word19)));
+        defaultWordList.add(new Word(getString(R.string.word20)));
+        defaultWordList.add(new Word(getString(R.string.word21)));
+        defaultWordList.add(new Word(getString(R.string.word22)));
+        defaultWordList.add(new Word(getString(R.string.word23)));
+        defaultWordList.add(new Word(getString(R.string.word24)));
+        defaultWordList.add(new Word(getString(R.string.word25)));
+        defaultWordList.add(new Word(getString(R.string.word26)));
+        defaultWordList.add(new Word(getString(R.string.word27)));
+        defaultWordList.add(new Word(getString(R.string.word28)));
+        defaultWordList.add(new Word(getString(R.string.word29)));
+        defaultWordList.add(new Word(getString(R.string.word30)));
+        defaultWordList.add(new Word(getString(R.string.word31)));
+        defaultWordList.add(new Word(getString(R.string.word32)));
+        defaultWordList.add(new Word(getString(R.string.word33)));
+        defaultWordList.add(new Word(getString(R.string.word34)));
+        defaultWordList.add(new Word(getString(R.string.word35)));
+        defaultWordList.add(new Word(getString(R.string.word36)));
+
+        return defaultWordList;
+    }
+
     private void removeWord(WordsAdapter mAdapter, int pos) {
         class RemoveWord extends AsyncTask<Void, Void, Word> { // claseinterna
             @Override
@@ -282,12 +225,140 @@ public class Dictionary extends AppCompatActivity {
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
                 mAdapter.removeWords();
-                for (int i = 0; i < words.size(); i++)
-                    mAdapter.addWord(words.get(i).getWord().toUpperCase());
+                mAdapter.addAll(words);
             }
         }
         GetAllWords gf = new GetAllWords(); // Crear una instancia y ejecutar
         gf.execute();
+    }
+
+    private void deleteAllWords() {
+        class DeleteAllWords extends AsyncTask<Void, Void, Word> { // claseinterna
+            @Override
+            protected Word doInBackground(Void... voids) {
+                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Word word) {
+                super.onPostExecute(word); // Actualizar la UI
+                mAdapter.removeWords();
+            }
+        }
+        DeleteAllWords gf = new DeleteAllWords(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mAdapter.getItemCount() == 0)
+            createExitDialog(mAdapter);
+    }
+
+    private void createExitDialog(WordsAdapter mAdapter) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.exit_dictionary_dialog);
+
+        builder.setPositiveButton(R.string.reset, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                insertDefaultWordList(createDefaultWordList(), 1);
+            }
+        });
+        builder.setNegativeButton(R.string.add_word, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                createAddDialog(mAdapter);
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void createAddDialog(WordsAdapter mAdapter) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_dialog);
+
+        EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.dialogOK, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String avaliableLetters = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNMáÁéÉíÍóÓúÚ";
+                String newWord = String.valueOf(input.getText());
+                if (newWord.length() > 17) {
+                    Toast.makeText(getApplicationContext(), "Palabra demasiado longa.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                boolean avaliable = true;
+                // Comprobar que non hai espazos
+                for (int j = 0; j < newWord.length(); j++) {
+                    if (!avaliableLetters.contains(String.valueOf(newWord.charAt(j)))) {
+                        avaliable = false;
+                        Toast.makeText(getApplicationContext(), "Soamente se permiten letras. [A,Z]", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+
+                if (avaliable) {
+                    String word = newWord.toUpperCase();
+                    insertWord(new Word(word), mAdapter);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void createDeleteDialog(WordsAdapter mAdapter, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.remove_dialog);
+
+        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                removeWord(mAdapter, position);
+            }
+        });
+        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void createResetBdDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.reset_dialog);
+
+        builder.setPositiveButton(R.string.dialogAcept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                insertDefaultWordList(createDefaultWordList(), 1);
+            }
+        });
+        builder.setNegativeButton(R.string.dialogCancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 
     private void createDeleteAllDialog() {
@@ -308,24 +379,6 @@ public class Dictionary extends AppCompatActivity {
         });
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void deleteAllWords() {
-        class DeleteAllWords extends AsyncTask<Void, Void, Word> { // claseinterna
-            @Override
-            protected Word doInBackground(Void... voids) {
-                WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Word word) {
-                super.onPostExecute(word); // Actualizar la UI
-                mAdapter.removeWords();
-            }
-        }
-        DeleteAllWords gf = new DeleteAllWords(); // Crear una instancia y ejecutar
-        gf.execute();
     }
 
 }

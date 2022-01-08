@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/añadir_menu"
-        android:title="@string/addWord"
+        android:title="@string/add_word"
         android:icon="@android:drawable/ic_menu_add"
         app:showAsAction="ifRoom"
         />

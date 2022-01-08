@@ -27,7 +27,7 @@ public interface WordDao {
     @Query("SELECT word FROM words WHERE id LIKE :id")
     Word getWord(Integer id);
 
-    @Query("SELECT word FROM words")
+    @Query("SELECT word FROM words ORDER BY word")
     List<Word> getAllWords();
 
     //Search any word

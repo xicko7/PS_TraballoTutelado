@@ -16,6 +16,27 @@
     <string name="word13">VERÁN</string>
     <string name="word14">DOTAR</string>
     <string name="word15">FRENO</string>
+    <string name="word16">RONQUIDO</string>
+    <string name="word17">BUSCA</string>
+    <string name="word18">ANINOVO</string>
+    <string name="word19">FOCHANCA</string>
+    <string name="word20">AÑO</string>
+    <string name="word21">BOTAR</string>
+    <string name="word22">MAIS</string>
+    <string name="word23">PODER</string>
+    <string name="word24">DAR</string>
+    <string name="word25">PRESA</string>
+    <string name="word26">HIPOPÓTAMO</string>
+    <string name="word27">PARABÉNS</string>
+    <string name="word28">PÓLA</string>
+    <string name="word29">FÓRA</string>
+    <string name="word30">TEIXUGO</string>
+    <string name="word31">VAGALUME</string>
+    <string name="word32">ORFO</string>
+    <string name="word33">ADOITAR</string>
+    <string name="word34">ORELLA</string>
+    <string name="word35">TECLA</string>
+    <string name="word36">CHAVE</string>
 
 
 
@@ -25,7 +46,7 @@
     <string name="multiplayer_bt">Multixogador</string>
     <string name="diccionario_bt">Dicionario</string>
     <string name="title_dicionario">Dicionario</string>
-    <string name="addWord">Engadir palabra</string>
+    <string name="add_word">Engadir palabra</string>
     <string name="remove">Toca para eliminar</string>
     <string name="dialogOK">Aceptar</string>
     <string name="dialogCancel">Cancelar</string>
@@ -42,5 +63,6 @@
     <string name="exit">Saír</string>
     <string name="new_game">Nova partida</string>
     <string name="deleteall_dialog">Borrar tódalas palabras?</string>
+    <string name="exit_dictionary_dialog">Non pode saír co dicionario baleiro.</string>
 
 </resources>

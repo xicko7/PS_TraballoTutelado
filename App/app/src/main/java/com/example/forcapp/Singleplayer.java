@@ -16,7 +16,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,18 +27,15 @@ import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Singleplayer extends AppCompatActivity {
+public class Singleplayer extends AppCompatActivity implements GameActivity {
 
-    private LetterAdapter adapter;
-    private GridView gridView;
-    private List<ImageView> faults = new ArrayList();
-    private int intentos;
+    private int intentos, numCorrectos;
     private String randomWord;
-    private List<TextView> charViews = new ArrayList();
+    private GridView gridView;
+    private final List<ImageView> faults = new ArrayList();
+    private final List<TextView> charViews = new ArrayList();
     private LinearLayout wordLayout;
-    private int numCorrectos;
-    private Collator myColaltor = Collator.getInstance();
-
+    private final Collator myColaltor = Collator.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +47,7 @@ public class Singleplayer extends AppCompatActivity {
         numCorrectos = 0;
         myColaltor.setStrength(Collator.PRIMARY);
         gridView = findViewById(R.id.letters);
-        adapter = new LetterAdapter(getApplicationContext());
+        LetterAdapter adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
         wordLayout = findViewById(R.id.Layour_words);
         getRandomWord();
@@ -81,43 +77,6 @@ public class Singleplayer extends AppCompatActivity {
             faults.add(imageViewIcon);
 
         }
-    }
-
-    void getRandomWord() {
-        class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
-                return words;
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words); // Actualizar la UI
-                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
-
-                for (int i = 0; i < randomWord.length(); i++) {
-                    charViews.add(new TextView(getApplicationContext()));
-                    charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
-                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)).toUpperCase());
-
-                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    charViews.get(i).setGravity(Gravity.CENTER);
-                    charViews.get(i).setTextColor(Color.WHITE);
-                    charViews.get(i).setTextSize(25);
-                    wordLayout.addView(charViews.get(i));
-                }
-                Toast.makeText(getApplicationContext(), randomWord, Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        GetRandomWord gf = new GetRandomWord(); // Crear una instancia y ejecutar
-        gf.execute();
-
-    }
-
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
     }
 
     private class LetterAdapter extends BaseAdapter {
@@ -205,7 +164,52 @@ public class Singleplayer extends AppCompatActivity {
 
     }
 
-    private void createGameOverDialog() {
+    @Override
+    public void getRandomWord() {
+        class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
+                if(words.size() == 0){
+                    words = Dictionary.defaulWordList;
+                }
+                return words;
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                super.onPostExecute(words); // Actualizar la UI
+                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
+
+                for (int i = 0; i < randomWord.length(); i++) {
+                    charViews.add(new TextView(getApplicationContext()));
+                    charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
+                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)).toUpperCase());
+
+                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    charViews.get(i).setGravity(Gravity.CENTER);
+                    charViews.get(i).setTextColor(Color.WHITE);
+                    charViews.get(i).setTextSize(25);
+                    wordLayout.addView(charViews.get(i));
+                }
+            }
+        }
+
+        GetRandomWord gf = new GetRandomWord(); // Crear una instancia y ejecutar
+        gf.execute();
+
+    }
+
+    @Override
+    public void disableButtons() {
+        for (int i = 0; i < gridView.getChildCount(); i++) {
+            gridView.getChildAt(i).setEnabled(false);
+
+        }
+    }
+
+    @Override
+    public void createGameOverDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.gameOver);
 
@@ -227,7 +231,8 @@ public class Singleplayer extends AppCompatActivity {
         alert.show();
     }
 
-    private void createWinnerDialog() {
+    @Override
+    public void createWinnerDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.gameWinner);
         builder.setMessage(getString(R.string.gameWinnerMessage) + ": " + randomWord);
@@ -251,11 +256,6 @@ public class Singleplayer extends AppCompatActivity {
 
     }
 
-    private void disableButtons() {
-        for (int i = 0; i < gridView.getChildCount(); i++) {
-            gridView.getChildAt(i).setEnabled(false);
 
-        }
-    }
 
 }
