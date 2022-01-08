@@ -62,5 +62,5 @@
     <string name="deleteall_dialog">Borrar tódalas palabras?</string>
     <string name="exit_dictionary_dialog">Non pode saír co dicionario baleiro.</string>
     <string name="cont">Continuar</string>
-
+    <string name="add_hint">Soamente se permiten letras do abecedario.</string>
 </resources>

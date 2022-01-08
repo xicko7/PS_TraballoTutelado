@@ -287,6 +287,7 @@ public class Dictionary extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
         builder.setView(input);
+        input.setHint(R.string.add_hint);
 
         builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
@@ -297,12 +298,16 @@ public class Dictionary extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Palabra demasiado longa.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (newWord.length() <= 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.add_hint), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 boolean avaliable = true;
                 // Comprobar que non hai espazos
                 for (int j = 0; j < newWord.length(); j++) {
                     if (!avaliableLetters.contains(String.valueOf(newWord.charAt(j)))) {
                         avaliable = false;
-                        Toast.makeText(getApplicationContext(), "Soamente se permiten letras. [A,Z]", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.add_hint), Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
