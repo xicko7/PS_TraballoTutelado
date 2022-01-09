@@ -264,7 +264,8 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     @Override
     public void createGameOverDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.game_over) + " " + getString(R.string.word_was) + " " + randomWord);
+        builder.setTitle(getString(R.string.game_over));
+        builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
