@@ -63,4 +63,8 @@
     <string name="exit_dictionary_dialog">Non pode saír co dicionario baleiro.</string>
     <string name="cont">Continuar</string>
     <string name="add_hint">Soamente se permiten letras do abecedario.</string>
+    <string name="join_lobby">UNIRSE A SALA</string>
+    <string name="create_bt">CREAR UNHA SALA</string>
+    <string name="join_bt">UNIRSE A SALA</string>
+    <string name="enter_code_dialog">Introducir código da sala:</string>
 </resources>

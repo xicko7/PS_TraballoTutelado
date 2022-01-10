@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".Singleplayer">
+    tools:context=".Multiplayer">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
 
 
         <ImageView
-            android:id="@+id/fault1"
+            android:id="@+id/fault1_mp"
             android:layout_width="200dp"
             android:layout_height="300dp"
             android:layout_marginTop="108dp"
@@ -28,7 +28,7 @@
             app:srcCompat="@drawable/fault3" />
 
         <ImageView
-            android:id="@+id/fault2"
+            android:id="@+id/fault2_mp"
             android:layout_width="268dp"
             android:layout_height="259dp"
             android:layout_marginTop="19dp"
@@ -39,7 +39,7 @@
             app:srcCompat="@drawable/fault2" />
 
         <ImageView
-            android:id="@+id/fault3"
+            android:id="@+id/fault3_mp"
             android:layout_width="205dp"
             android:layout_height="77dp"
             android:layout_marginTop="5dp"
@@ -50,7 +50,7 @@
             app:srcCompat="@drawable/fault3" />
 
         <ImageView
-            android:id="@+id/fault4"
+            android:id="@+id/fault4_mp"
             android:layout_width="120dp"
             android:layout_height="77dp"
             android:layout_marginTop="18dp"
@@ -61,7 +61,7 @@
             app:srcCompat="@drawable/fault4" />
 
         <ImageView
-            android:id="@+id/fault5"
+            android:id="@+id/fault5_mp"
             android:layout_width="88dp"
             android:layout_height="36dp"
             android:layout_marginTop="43dp"
@@ -72,7 +72,7 @@
             app:srcCompat="@drawable/body" />
 
         <ImageView
-            android:id="@+id/fault6"
+            android:id="@+id/fault6_mp"
             android:layout_width="50dp"
             android:layout_height="41dp"
             android:layout_marginTop="79dp"
@@ -83,7 +83,7 @@
             app:srcCompat="@drawable/head" />
 
         <ImageView
-            android:id="@+id/fault7"
+            android:id="@+id/fault7_mp"
             android:layout_width="7dp"
             android:layout_height="184dp"
             android:layout_marginTop="59dp"
@@ -94,7 +94,7 @@
             app:srcCompat="@drawable/body" />
 
         <ImageView
-            android:id="@+id/fault8"
+            android:id="@+id/fault8_mp"
             android:layout_width="32dp"
             android:layout_height="24dp"
             android:layout_marginTop="135dp"
@@ -105,7 +105,7 @@
             app:srcCompat="@drawable/arm_left" />
 
         <ImageView
-            android:id="@+id/fault9"
+            android:id="@+id/fault9_mp"
             android:layout_width="32dp"
             android:layout_height="24dp"
             android:layout_marginTop="135dp"
@@ -116,7 +116,7 @@
             app:srcCompat="@drawable/arm_right" />
 
         <ImageView
-            android:id="@+id/fault10"
+            android:id="@+id/fault10_mp"
             android:layout_width="30dp"
             android:layout_height="59dp"
             android:layout_marginTop="180dp"
@@ -130,7 +130,7 @@
             app:tint="#000000" />
 
         <ImageView
-            android:id="@+id/fault11"
+            android:id="@+id/fault11_mp"
             android:layout_width="30dp"
             android:layout_height="59dp"
             android:layout_marginTop="180dp"
@@ -146,7 +146,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/Layour_words"
+        android:id="@+id/layout_words_mp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -157,7 +157,7 @@
         android:padding="20dp"/>
 
     <GridView
-        android:id="@+id/letters"
+        android:id="@+id/letters_mp"
         android:layout_width="match_parent"
         android:layout_height="343dp"
         android:layout_gravity="center"

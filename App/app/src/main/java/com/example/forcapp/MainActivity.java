@@ -19,8 +19,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button dictionaryButton;
-    Button singleplayerButton;
     TextView title_tv;
 
     @Override
@@ -35,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUI() {
-        dictionaryButton = findViewById(R.id.diccionario_bt);
+
+        Button dictionaryButton = findViewById(R.id.diccionario_bt);
         dictionaryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,12 +43,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        singleplayerButton = findViewById(R.id.singleplayer_bt);
+        Button singleplayerButton = findViewById(R.id.singleplayer_bt);
         singleplayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent singleplayerIntent = new Intent(getApplicationContext(), Singleplayer.class);
                 startActivity(singleplayerIntent);
+            }
+        });
+
+        Button multiplayerButton = findViewById(R.id.multiplayer_bt);
+        multiplayerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent multiplayerIntent = new Intent(getApplicationContext(), Multiplayer.class);
+                startActivity(multiplayerIntent);
             }
         });
 

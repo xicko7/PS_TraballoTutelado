@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,10 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -24,12 +29,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Singleplayer extends AppCompatActivity implements GameActivity {
+public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     private int intentos, numCorrectos;
     private String randomWord;
@@ -39,40 +46,101 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     private LinearLayout wordLayout;
     private final Collator myCollator = Collator.getInstance();
     private boolean gameFinished;
+    private int code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.singleplayer_layout);
-        getSupportActionBar().setTitle(R.string.singleplayer_bt);
+        isInternetAvailable();
+
+        setContentView(R.layout.multiplayer_lobby_layout);
+        /*
+         * Se non se está loggeado ofrecer log in ou sign in con un fragment (ou activity)
+         */
+        getSupportActionBar().setTitle(R.string.multiplayer_bt);
+
+        setLobbyUI();
+
+
+    }
+
+    private void setLobbyUI() {
+        Button createButton = findViewById(R.id.create_bt);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isInternetAvailable()) {
+                    /*
+                     * Crear sala como host
+                     */
+                    createLobby();
+                    if (isInternetAvailable())
+                        startGame();
+                }
+            }
+        });
+
+        Button joinButton = findViewById(R.id.join_bt);
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                enterCodeDialog();
+            }
+        });
+    }
+
+    private void createLobby() {
+        code = getRandomNumber(0, 9999);
+        /*
+        String reference;
+        if (code < 10)
+            reference = "000" + String.valueOf(code);
+        else if (code < 100)
+            reference = "00" + String.valueOf(code);
+        else if (code < 1000)
+            reference = "0" + String.valueOf(code);
+        else
+            reference = String.valueOf(code);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(reference);
+
+
+        myRef.setValue("Hello, World!");
+         */
+    }
+
+    private void startGame() {
+        setContentView(R.layout.multiplayer_layout);
+        getSupportActionBar().setTitle(R.string.multiplayer_bt);
 
         intentos = 0;
         numCorrectos = 0;
         myCollator.setStrength(Collator.PRIMARY);
-        gridView = findViewById(R.id.letters_sp);
+        gridView = findViewById(R.id.letters_mp);
         LetterAdapter adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
-        wordLayout = findViewById(R.id.layout_words_sp);
+        wordLayout = findViewById(R.id.layout_words_mp);
         getRandomWord();
         gameFinished = false;
-        setUI();
+        setGameUI();
     }
 
-    private void setUI() {
+    private void setGameUI() {
 
-        ArrayList<Integer> ids = new ArrayList<Integer>();
+        ArrayList<Integer> ids = new ArrayList<>();
 
-        ids.add(R.id.fault1_sp);
-        ids.add(R.id.fault2_sp);
-        ids.add(R.id.fault3_sp);
-        ids.add(R.id.fault4_sp);
-        ids.add(R.id.fault5_sp);
-        ids.add(R.id.fault6_sp);
-        ids.add(R.id.fault7_sp);
-        ids.add(R.id.fault8_sp);
-        ids.add(R.id.fault9_sp);
-        ids.add(R.id.fault10_sp);
-        ids.add(R.id.fault11_sp);
+        ids.add(R.id.fault1_mp);
+        ids.add(R.id.fault2_mp);
+        ids.add(R.id.fault3_mp);
+        ids.add(R.id.fault4_mp);
+        ids.add(R.id.fault5_mp);
+        ids.add(R.id.fault6_mp);
+        ids.add(R.id.fault7_mp);
+        ids.add(R.id.fault8_mp);
+        ids.add(R.id.fault9_mp);
+        ids.add(R.id.fault10_mp);
+        ids.add(R.id.fault11_mp);
 
         for (int i = 0; i < ids.size(); i++) {
             ImageView imageViewIcon = findViewById(ids.get(i));
@@ -109,13 +177,11 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     }
 
     private class LetterAdapter extends BaseAdapter {
-        private String[] letters;
-        private LayoutInflater letterInf;
-        private Context context;
+        private final String[] letters;
+        private final LayoutInflater letterInf;
 
         public LetterAdapter(Context context) {
             letters = new String[26];
-            this.context = context;
             for (int i = 0; i < letters.length; i++) {
                 letters[i] = "" + (char) (i + 'A');
             }
@@ -270,15 +336,17 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = getIntent();
                 finish();
+                startActivity(intent);
             }
         });
         builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
+                /*
+                 * Deberiase repetir a mesma partida cos xogadores que pulsasen este botón
+                 */
             }
         });
         AlertDialog alert = builder.create();
@@ -294,20 +362,67 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
             }
         });
+        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                /*
+                 * Deberiase repetir a mesma partida cos xogadores que pulsasen este botón
+                 */
+            }
+        });
         AlertDialog alert = builder.create();
         alert.show();
 
+    }
+
+    private void enterCodeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.enter_code_dialog);
+
+        EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        builder.setView(input);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                code = Integer.parseInt(String.valueOf(input.getText()));
+                if (isInternetAvailable()) {
+                    /*
+                     * Unirse a sala con "code"
+                     */
+                    if (isInternetAvailable())
+                        startGame();
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                // Cancelar
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private boolean isInternetAvailable() {
+        Context context = getApplicationContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        boolean res = netInfo != null && netInfo.isConnectedOrConnecting();
+        if (!res)
+            Toast.makeText(getApplicationContext(), "Non hai conexión a internet.", Toast.LENGTH_SHORT).show();
+        return res;
     }
 
 }

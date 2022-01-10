@@ -42,7 +42,14 @@ public class Dictionary extends AppCompatActivity {
         // Engadir as palabras por defecto da app
         setUI();
         defaulWordList = createDefaultWordList();
-        insertDefaultWordList(defaulWordList, 0);
+        insertDefaultWordList(defaulWordList, false);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAdapter.getItemCount()==0)
+            insertDefaultWordList(defaulWordList, false);
     }
 
     private void setUI() {
@@ -129,11 +136,11 @@ public class Dictionary extends AppCompatActivity {
         gf.execute();
     }
 
-    private void insertDefaultWordList(List<Word> wordList, int reset) {
+    private void insertDefaultWordList(List<Word> wordList, boolean reset) {
         class InsertWordList extends AsyncTask<Void, Void, List<Word>> {
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                if (reset == 1) {
+                if (reset) {
                     WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().deleteAllWords();
                 }
 
@@ -265,7 +272,7 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                insertDefaultWordList(createDefaultWordList(), 1);
+                insertDefaultWordList(createDefaultWordList(), true);
             }
         });
         builder.setNegativeButton(R.string.add_word, new DialogInterface.OnClickListener() {
@@ -355,7 +362,7 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                insertDefaultWordList(createDefaultWordList(), 1);
+                insertDefaultWordList(createDefaultWordList(), true);
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
