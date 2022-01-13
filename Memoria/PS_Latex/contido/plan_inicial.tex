@@ -2,31 +2,25 @@
 \label{chap:plan_inicial}
 
 \section{Iteracións}
-O proxecto fragmentarase na iteración de presentación do proxecto (\textit{brainstorming}, preparación dos documentos necesarios) dúas iteracións para o \textit{singleplayer} (desarrollo \textit{software} e probas) e outras dúas iguais para o \textit{multiplayer}.
-
-Para cada modo de xogo, o primeiro que se fará é a vista principal do xogo e os fragmentos das diferentes modalidades que ofrece, como pode ser a elección do modo, ou obter o historial de partidas. Despois
-comezarase coa creación da vista do xogo en si e os seus elementos e finalmente comprobarase con tests o seu correcto funcionamento, probar cando unha letra non pertence á palabra
-a adiviñar, a condición de gañar ou perder a partida, etc.\\
-Ao rematar a devandita iteración e antes da data de entrega do proxecto comezarase a  facer unha última iteración para implementar unha funcionalidade multixogador \textit{online} para partidas 1 contra 1 e as súas probas correspondentes. \\ \\
-Como traballos futuros contémplase a elaboración dunha última iteración que implemente salas con máis de dous xogadores onde un deles faria como anfitrión ou servidor.
-%\begin{enumerate}
-%    \item \textbf{Modo singleplayer}
-%    \item \textbf{Modo multiplayer}
-%\end{enumerate}
+O proxecto fragmentarase na iteración de presentación do proxecto (\textit{brainstorming}, preparación dos documentos necesarios), as tres primeiras funcionalidades \textit{offline} a o multixogador \textit{online} por últimno. Como iteracións complementarias están os traballos futuros e as probas de validación do software.
 
 \section{Responsabilidades}
-Por dispoñibilidade temporal, a idea é que todos os integrantes do grupo implementen as funcionalidades xuntos xa que é improbable que se solapen os traballos de dous recursos diferentes. Todos os membros do grupo terán a mesma porcentaxe de responsabilidade aínda que o esperable é que os traballos se vaian asignando dinamicamente e sobre a marcha do proxecto segundo vaian xurdindo., axudarémonos do control de versións \textit{git} para facilitar o traballo.
+Por dispoñibilidade temporal, a idea é que todos os integrantes do grupo implementen as funcionalidades xuntos xa que é improbable que se solapen os traballos de dous recursos diferentes.\\
+
+Tódolos membros do grupo terán a mesma porcentaxe de responsabilidade aínda que o esperable é que os traballos se vaian asignando dinamicamente e sobre a marcha do proxecto segundo sexa necesario.\\ Botaremos man do control de versións \textit{git} para facilitar o traballo.
 
 \section{Fitos e entregables}
 Haberá un total de 2
-fitos, un para cada unha das funcionalidades a realizar cada unha cun mes de duración. Primeiro farase o modo \textit{singleplayer} e todo o que conleva, facer todas as vistas e fragmentos para que se poida xogar, se hai problemas ou non será a tarefa dos tests. No segundo , actualizarase a vista para que apareza o outro modo de xogo, e a vista será modificada respecto á do \textit{singleplayer} está pensado so para un xogador.%No terceiro fito, haberá que implementar o código que permita xogar ao forcado en dous diferentes dispositivos.
+fitos, un para cada unha das funcionalidades a realizar cada unha cun mes de duración. Primeiro farase o modo dun xogador e todo o que conleva (dicionario e menú principal), facer todas as vistas e código para que se poida xogar con normalidade. Este punto marcará o fin do primeiro fito.\\
+
+No segundo , partiremos do traballo xa relaizado para elaborar a lóxica e as vistas do modo multixogador, ao estar rematado darase por finalizado o segundo fito.
 
 
 \section{Incidencias e plans de continxencia}
-O principal risco que se vai ter en conta en conta debido á súa probable materialización son os contratempos á hora do desenvolvemento \textit{software}. Este risco está presente en case todos os proxectos \textit{software} e aínda máis cando se trata dun proxecto non profesional e con falta de experiencia na metodoloxía.\\
-A solución aplicada para isto é tratar de adiantar o proxecto máximo posible coa mentalidade pesimista de que chegará algún contratempo que retrase o proceso.
-%offline e se todo vai ben o online.
-%No caso de non xurdiren problemas para implementar o modo online, intentarase ofrecer máis modalidades ou ítems de axuda. %nas funcionalidades singleplayer ou offline, 
-%como poden ser moedas virtuais que compren pistas ou descubran letras para ter máis probabilidade de adiviñar a palabra.
+O principal risco que se vai ter en conta en conta debido á súa probable materialización son os contratempos á hora do desenvolvemento \textit{software} e resolución de \textit{bugs}. Este risco está presente en case todos os proxectos \textit{software} e aínda máis cando se trata dun proxecto non profesional e con falta de experiencia na metodoloxía.\\
+
+A solución aplicada para isto é tratar de adiantar o proxecto máximo posible coa mentalidade pesimista de que chegará algún contratempo que retrase o proceso.\\
+
+Para a solución de \textit{bugs} na interface intentaranse forzar as funcionalidades da aplicación o máximo posible e intentar solucionalos modificando o código. Para a solución de excepcións da linguaxe (\textit{Java} e \textit{xml}) botaremos man do \textit{debugger} para ver os valores dos datos da aplicación en cada momento e ver o que sucede en cada intre para distintos valores. Para verificar o correcto funcionamento da base de datos utilizarase a funcionalidade \textit{App Inspector} incorporada en \textit{Android Studio}
 
  \let\cleardoublepage=\clearpage 
