@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="325dp"
+        android:layout_height="300dp"
         android:background="@color/backgroundColor"
         android:gravity="center">
 
@@ -159,12 +159,12 @@
     <GridView
         android:id="@+id/letters_sp"
         android:layout_width="match_parent"
-        android:layout_height="343dp"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:background="@color/backgroundColor"
         android:horizontalSpacing="5dp"
-        android:numColumns="5"
-        android:padding="5dp"
+        android:numColumns="6"
+        android:padding="10dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
 

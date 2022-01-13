@@ -72,7 +72,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         wordLayout = findViewById(R.id.layout_words_mp);
         getRandomWord();
         gameFinished = false;
-        setGameUI();
     }
 
     private void setGameUI() {
