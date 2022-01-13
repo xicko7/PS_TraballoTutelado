@@ -3,9 +3,14 @@ package com.example.forcapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +45,29 @@ public class AuthActivity extends AppCompatActivity {
         setUI();
     }
 
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                goHome();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        goHome();
+    }
+
+    private void goHome() {
+        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(homeIntent);
+    }
+
     private void setUI() {
         logInButton = findViewById(R.id.log_in_bt);
         signInButton = findViewById(R.id.sign_in_bt);
@@ -53,21 +81,25 @@ public class AuthActivity extends AppCompatActivity {
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = String.valueOf(emailET.getText());
-                String password = String.valueOf(passwordET.getText());
+                if (isInternetAvailable()) {
+                    String email = String.valueOf(emailET.getText());
+                    String password = String.valueOf(passwordET.getText());
 
-                firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "Login con éxito", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                            errorToast(errorCode);
-                        }
+                    if (awesomeValidation.validate()) {
+                        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Login con éxito", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                    errorToast(errorCode);
+                                }
+                            }
+                        });
                     }
-                });
+                }
             }
         });
 
@@ -76,7 +108,6 @@ public class AuthActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent signIntent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(signIntent);
-                finish();
             }
         });
 
@@ -172,5 +203,16 @@ public class AuthActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private boolean isInternetAvailable() {
+        Context context = getApplicationContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        boolean res = netInfo != null && netInfo.isConnectedOrConnecting();
+        if (!res)
+            Toast.makeText(getApplicationContext(), "Non hai conexión a internet.", Toast.LENGTH_SHORT).show();
+        return res;
     }
 }

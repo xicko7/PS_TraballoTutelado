@@ -1,7 +1,11 @@
 package com.example.forcapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +41,18 @@ public class SignInActivity extends AppCompatActivity {
         setUI();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     private void setUI() {
         signInButton = findViewById(R.id.sign_in_bt_si);
         emailET = findViewById(R.id.email_et_si);
@@ -48,24 +64,25 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String email = String.valueOf(emailET.getText());
-                String password = String.valueOf(passwordET.getText());
+                if (isInternetAvailable()) {
+                    String email = String.valueOf(emailET.getText());
+                    String password = String.valueOf(passwordET.getText());
 
-                if (awesomeValidation.validate()) {
-                    firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                errorToast(errorCode);
+                    if (awesomeValidation.validate()) {
+                        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                    errorToast(errorCode);
+                                }
                             }
-                        }
-                    });
-                } else
-                    Toast.makeText(getApplicationContext(), "Introduce correo e contrasinal", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
             }
         });
     }
@@ -152,5 +169,16 @@ public class SignInActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private boolean isInternetAvailable() {
+        Context context = getApplicationContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        boolean res = netInfo != null && netInfo.isConnectedOrConnecting();
+        if (!res)
+            Toast.makeText(getApplicationContext(), "Non hai conexión a internet.", Toast.LENGTH_SHORT).show();
+        return res;
     }
 }

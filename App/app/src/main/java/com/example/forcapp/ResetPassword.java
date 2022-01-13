@@ -1,7 +1,11 @@
 package com.example.forcapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +40,18 @@ public class ResetPassword extends AppCompatActivity {
         setUI();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     private void setUI() {
 
         resetButton = findViewById(R.id.forget_password_bt);
@@ -45,21 +61,23 @@ public class ResetPassword extends AppCompatActivity {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (awesomeValidation.validate()) {
-                    firebaseAuth.sendPasswordResetEmail(emailET.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Email enviado.", Toast.LENGTH_SHORT).show();
-                                finish();
-                            } else {
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-                                errorToast(errorCode);
+
+                if (isInternetAvailable()) {
+                    if (awesomeValidation.validate()) {
+                        firebaseAuth.sendPasswordResetEmail(emailET.getText().toString()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Email enviado.", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                                    errorToast(errorCode);
+                                }
                             }
-                        }
-                    });
-                } else
-                    Toast.makeText(getApplicationContext(), "Introduce correo", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }
 
             }
         });
@@ -134,5 +152,16 @@ public class ResetPassword extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private boolean isInternetAvailable() {
+        Context context = getApplicationContext();
+        ConnectivityManager cm = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        boolean res = netInfo != null && netInfo.isConnectedOrConnecting();
+        if (!res)
+            Toast.makeText(getApplicationContext(), "Non hai conexión a internet.", Toast.LENGTH_SHORT).show();
+        return res;
     }
 }
