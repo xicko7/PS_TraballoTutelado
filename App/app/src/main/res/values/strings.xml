@@ -39,7 +39,6 @@
     <string name="word36">CHAVE</string>
 
 
-
     <string name="app_name">ForcApp</string>
     <string name="singleplayer_bt">Un xogador</string>
     <string name="multiplayer_bt">Multixogador</string>
@@ -64,7 +63,16 @@
     <string name="cont">Continuar</string>
     <string name="add_hint">Soamente se permiten letras do abecedario.</string>
     <string name="join_lobby">UNIRSE A SALA</string>
-    <string name="create_bt">CREAR UNHA SALA</string>
+    <string name="create_bt">CREAR SALA</string>
     <string name="join_bt">UNIRSE A SALA</string>
     <string name="enter_code_dialog">Introducir código da sala:</string>
+    <string name="sign_in_bt">REXISTRARSE</string>
+    <string name="log_in_bt">INICIAR SESIÓN</string>
+    <string name="forget_password">Recuperar contrasinal</string>
+    <string name="add_email">Correo electrónico</string>
+    <string name="password">Contrasinal</string>
+    <string name="auth">Autentificación</string>
+    <string name="invaild_password">Ingresa un contrasinal con máis de 6 caracteres.</string>
+    <string name="invalid_email">Email non válido.</string>
+    <string name="sign_out">Pechar sesión</string>
 </resources>

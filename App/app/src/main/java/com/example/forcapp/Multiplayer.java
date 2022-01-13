@@ -53,65 +53,14 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         super.onCreate(savedInstanceState);
         isInternetAvailable();
 
-        setContentView(R.layout.multiplayer_lobby_layout);
-        /*
-         * Se non se está loggeado ofrecer log in ou sign in con un fragment (ou activity)
-         */
+        setContentView(R.layout.multiplayer_layout);
         getSupportActionBar().setTitle(R.string.multiplayer_bt);
 
-        setLobbyUI();
-
-
-    }
-
-    private void setLobbyUI() {
-        Button createButton = findViewById(R.id.create_bt);
-        createButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isInternetAvailable()) {
-                    /*
-                     * Crear sala como host
-                     */
-                    createLobby();
-                    if (isInternetAvailable())
-                        startGame();
-                }
-            }
-        });
-
-        Button joinButton = findViewById(R.id.join_bt);
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enterCodeDialog();
-            }
-        });
-    }
-
-    private void createLobby() {
-        code = getRandomNumber(0, 9999);
-        /*
-        String reference;
-        if (code < 10)
-            reference = "000" + String.valueOf(code);
-        else if (code < 100)
-            reference = "00" + String.valueOf(code);
-        else if (code < 1000)
-            reference = "0" + String.valueOf(code);
-        else
-            reference = String.valueOf(code);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(reference);
-
-
-        myRef.setValue("Hello, World!");
-         */
+        setGameUI();
+        startGame();
     }
 
     private void startGame() {
-        setContentView(R.layout.multiplayer_layout);
         getSupportActionBar().setTitle(R.string.multiplayer_bt);
 
         intentos = 0;
@@ -378,40 +327,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         AlertDialog alert = builder.create();
         alert.show();
 
-    }
-
-    private void enterCodeDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.enter_code_dialog);
-
-        EditText input = new EditText(this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        input.setLayoutParams(lp);
-        builder.setView(input);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-
-        builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                code = Integer.parseInt(String.valueOf(input.getText()));
-                if (isInternetAvailable()) {
-                    /*
-                     * Unirse a sala con "code"
-                     */
-                    if (isInternetAvailable())
-                        startGame();
-                }
-            }
-        });
-        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Cancelar
-            }
-        });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
     private boolean isInternetAvailable() {

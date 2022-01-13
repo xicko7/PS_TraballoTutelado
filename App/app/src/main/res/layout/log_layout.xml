@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/image_background"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/email_et"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/add_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/password_et"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/log_in_bt"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="96dp"
+        android:backgroundTint="@color/iconColor2"
+        android:gravity="center"
+        android:text="@string/log_in_bt"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/sign_in_bt"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/log_in_bt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:layout_marginEnd="96dp"
+        android:backgroundTint="@color/iconColor2"
+        android:text="@string/sign_in_bt"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <Button
+        android:id="@+id/forget_password_bt"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sign_in_bt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="96dp"
+        android:backgroundTint="@color/backgroundColor"
+        android:text="@string/forget_password"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <EditText
+        android:id="@+id/email_et2"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="225dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/add_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/password_et2"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="275dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,48 +14,44 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <Button
-        android:id="@+id/create_bt"
+        android:id="@+id/sign_in_bt_si"
         android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="96dp"
-        android:backgroundTint="@color/iconColor2"
-        android:gravity="center"
-        android:text="@string/create_bt"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/join_bt"
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/create_bt"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="250dp"
         android:layout_marginEnd="96dp"
         android:backgroundTint="@color/iconColor2"
-        android:text="@string/join_bt"
-        android:textSize="20dp"
+        android:text="@string/sign_in_bt"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/sign_out_bt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/create_bt"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/backgroundColor"
-        android:text="@string/sign_out"
-        android:textSize="12dp"
+
+    <EditText
+        android:id="@+id/email_et_si"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/add_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/password_et_si"
+        android:textSize="20sp"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="56dp"
+        android:background="@color/white"
+        android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:inputType="textPassword"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
