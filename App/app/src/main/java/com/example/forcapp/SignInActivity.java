@@ -51,8 +51,6 @@ public class SignInActivity extends AppCompatActivity {
                 String email = String.valueOf(emailET.getText());
                 String password = String.valueOf(passwordET.getText());
 
-                setContentView(R.layout.log_layout);
-
                 if (awesomeValidation.validate()) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override

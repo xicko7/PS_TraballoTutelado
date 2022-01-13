@@ -30,11 +30,11 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() == null) {
+        if (firebaseAuth.getCurrentUser() != null) {
             finish();
         }
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
-        setContentView(R.layout.log_layout);
+        setContentView(R.layout.auth_layout);
         getSupportActionBar().setTitle(R.string.auth);
 
         setUI();
@@ -61,6 +61,7 @@ public class AuthActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "Login con éxito", Toast.LENGTH_SHORT).show();
+                            finish();
                         } else {
                             String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                             errorToast(errorCode);
@@ -75,12 +76,15 @@ public class AuthActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent signIntent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(signIntent);
+                finish();
             }
         });
 
         forgetPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent resetIntent = new Intent(getApplicationContext(), ResetPassword.class);
+                startActivity(resetIntent);
             }
         });
     }

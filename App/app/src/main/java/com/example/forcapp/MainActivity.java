@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         multiplayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent multiplayerIntent = new Intent(getApplicationContext(), Multiplayer.class);
+                Intent multiplayerIntent = new Intent(getApplicationContext(), LobbyActivity.class);
                 startActivity(multiplayerIntent);
             }
         });

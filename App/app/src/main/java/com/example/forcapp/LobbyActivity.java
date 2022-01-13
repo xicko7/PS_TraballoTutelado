@@ -21,15 +21,16 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LobbyActivity extends AppCompatActivity {
 
-    private boolean logged = false;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.multiplayer_lobby_layout);
 
-        Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
-        startActivity(authIntent);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
+            startActivity(authIntent);
+        }
+
+        setContentView(R.layout.multiplayer_lobby_layout);
 
         setLobbyUI();
     }
@@ -45,6 +46,7 @@ public class LobbyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (isInternetAvailable()) {
                     FirebaseAuth.getInstance().signOut();
+                    finish();
                 }
             }
         });
@@ -59,10 +61,10 @@ public class LobbyActivity extends AppCompatActivity {
                      * Crear sala como host
                      */
                     createLobby();
-                /*
-                if (isInternetAvailable())
+
+                    if (isInternetAvailable())
                         startGame();
-                 */
+
 
                 }
             }
@@ -96,10 +98,10 @@ public class LobbyActivity extends AppCompatActivity {
                     /*
                      * Unirse a sala con "code"
                      */
-                    /*
-                       if (isInternetAvailable())
-                            startGame();
-                     */
+
+                    if (isInternetAvailable())
+                        startGame();
+
                 }
             }
         });
@@ -114,6 +116,19 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void createLobby() {
+    }
+
+    private void startGame() {
+        /*
+        Intent + bundle
+         */
+
+        Intent multiplayerIntent = new Intent(getApplicationContext(), Multiplayer.class);
+        /*
+        put extras
+         */
+        finish();
+        startActivity(multiplayerIntent);
     }
 
     private boolean isInternetAvailable() {
