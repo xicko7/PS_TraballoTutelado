@@ -8,20 +8,21 @@ Tamén se plantexou unha arquitectura seguindo o estilo cliente/servidor para el
 
 \section {Persistencia}
 Almacenarase o número de equipos e o nome de cada un deles que participaron na última partida en multixogador.
-Ademais será necesario almacenar un diccionario con palabras para que os usuarios intenten adiviñar unha delas. Este diccionario poderíase ampliar con palabras propostas polos propios xogadores.
+Ademais será necesario almacenar un diccionario con palabras para que os usuarios intenten adiviñar unha delas. Este diccionario poderíase ampliar con palabras propostas polos propios xogadores, será almacenado nunha base de datos dentro da propia aplicación.
 Pódese almacenar tamén un historial das partidas co tipo de modo xogado, os participantes e o resultado.
 
 \section {Vista}
 Valóranse facer tres actividades distintas.\\
-A primeira delas para o menú principal e a configuración, onde se poderá elexir o modo de xogo mediante dous botóns, cun botón dun menú onde se desplegará un fragmento dinámico onde se poderá configurar a aplicación, visualizar historial e engadir palabras ao diccionario por defecto.\\
+A primeira delas para o menú principal e a configuración, onde se poderá elexir o modo de xogo mediante dous botóns, cun botón dun menú onde se desplegará un fragmento dinámico e se poderá configurar a aplicación, visualizar historial e engadir palabras ao diccionario por defecto.\\
 
 Outra para o modo dun solo xogador, onde aparecería o debuxo do forcado e os ocos das letras da palabra a adiviñar coas letras acertadas ata o momento.\\
 
-E unha última para o modo multixogador, similar a anterior, pero con outro fragmento dinámico que apareza entre o turno de cada equipo para evitar que se poida ver o progreso dos rivais e ver letras que aínda non foron adiviñadas, isto podería funcionar mediante un fragmento dinámico, que aparece e desaparece entre cada turno.\\
-Sería necesario ademais outro fragmento ou actividade para a introdución de equipos.
+E unha última para o modo multixogador tanto online como offline, similar a anterior, pero con outro fragmento dinámico que apareza entre o turno de cada equipo para evitar que se poida ver o progreso dos rivais e ver letras que aínda non foron adiviñadas, isto podería funcionar mediante un fragmento dinámico, que aparece e desaparece entre cada turno.\\
+Sería necesario ademais outro fragmento ou actividade para a introdución de equipos no multixogador local.
+No multixogador en línea plantéxase facer unha barra situada na parte superior onde se ve o estado da partida do contrincante para saber se rematou ou non e coa posibilidade de introducir os intentos que leva realizados ata o momento.
 
 \section {Comunicacións}
-As únicas comunicacións necesarias serán as da app co S.O., como se explicou no apartado anterior, ao ser un xogo en local non cómpren comunicacións externas baseadas no modelo de arquitectura cliente/servidor. Recalcar que sería posible realizar unha funcionalidade na que se xogase en diferentes salas virtuais, seguindo a modalidade da maioría de xogos online actuais, pero esta parte, por unha presumible falta de tempo, será prescindible. No caso de exceder tempo xa se comentou no apartado de iteracións a posibilidade de elaborar unha nova.
+As únicas comunicacións necesarias serán as da app co S.O., as únicas comunicacións externas necesarioas serían entre os dous xogadores que se enferntasen nunha partida online na que un deles sería o servidor e outro o cliente. Recalcar que sería posible realizar unha funcionalidade na que se xogase en diferentes salas virtuais con máis de dous xogadores, seguindo a modalidade da maioría de xogos online actuais, pero esta parte, por unha presumible falta de tempo, será prescindible. No caso de exceder tempo xa se comentou no apartado de iteracións a posibilidade de elaborar unha nova.
 
 \section {Sensores}
 Para a utilización desta aplicación non é necesario ningún hardware específico do dispositivo utilizado, polo que non se utilizarán sensores. 
