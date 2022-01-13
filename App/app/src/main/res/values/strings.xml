@@ -75,4 +75,22 @@
     <string name="invaild_password">Ingresa un contrasinal con máis de 6 caracteres.</string>
     <string name="invalid_email">Email non válido.</string>
     <string name="sign_out">Pechar sesión</string>
+    <string name="ERROR_INVALID_CUSTOM_TOKEN">O formato do token personalizado é incorrecto. Por favor revise a documentación.</string>
+    <string name="ERROR_CUSTOM_TOKEN_MISMATCH">O token personalizado corresponde a unha audiencia diferente.</string>
+    <string name="ERROR_INVALID_CREDENTIAL">A credencial de autenticación proporcionada ten un formato incorrecto ou caducado.</string>
+    <string name="ERROR_INVALID_EMAIL">A direción do correo electrónico está mal formateada.</string>
+    <string name="ERROR_WRONG_PASSWORD">O contrasinal non é válido ou o usuario non ten contrasinal.</string>
+    <string name="contrasinalIncorrecto">O contrasinal é incorrecto</string>
+    <string name="ERROR_USER_MISMATCH">As credenciais proporcionadas non corresponden ao usuario que iniciou sesión anteriormente.</string>
+    <string name="ERROR_REQUIRES_RECENT_LOGIN">Esta operación é sensible e require de autenticación recente. Inicie de sesión novamente antes de volver a intentar esta solicitud.</string>
+    <string name="ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL">Xa existe unha conta coa mesma dirección de correo electrónico, pero diferentes credenciais de inicio de sesión. Inicie sesión con un proveedor asociado a esta dirección de correo electrónico.</string>
+    <string name="ERROR_EMAIL_ALREADY_IN_USE">A dirección do correo electrónico xa está sendo utilizada por outra conta.</string>
+    <string name="ERROR_CREDENTIAL_ALREADY_IN_USE">A credencial xa está asociada con unha conta de usuario diferente.</string>
+    <string name="ERROR_USER_DISABLED">A conta de usuario foi inhabilitada por un administrador.</string>
+    <string name="ERROR_USER_TOKEN_EXPIRED">A credencial do usuario xa non é válida. O usuario debe iniciar sesión novamente.</string>
+    <string name="ERROR_USER_NOT_FOUND">Non hai ningún rexistro de usuario que corresponda a este identificador. É posíbel que o usuario fora eliminado.</string>
+    <string name="ERROR_INVALID_USER_TOKEN">A credencial do usuario xa non é válida. O usuario debe iniciar sesión novamente.</string>
+    <string name="ERROR_OPERATION_NOT_ALLOWED">Esta operación non está permitida. Debes habilitar o servizo na consola.</string>
+    <string name="ERROR_WEAK_PASSWORD">O contrasinal non é valido.</string>
+    <string name="ERROR_MIN_6CHARS">O contrasinal non é valido, debe ter polo menos 6 caracteres.</string>
 </resources>
