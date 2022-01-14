@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,11 +17,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.example.forcapp.entity.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -28,6 +39,9 @@ public class SignInActivity extends AppCompatActivity {
     EditText emailET, passwordET;
     FirebaseAuth firebaseAuth;
     AwesomeValidation awesomeValidation;
+    DatabaseReference myRef;
+    //FirebaseFirestore db = FirebaseFirestore.getInstance(); VERSION UTILIZANDO CLOUD FIRESTORE
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +50,10 @@ public class SignInActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.auth);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        //VERSION UTILIZANDO REALTIME DATABASE
+        myRef = FirebaseDatabase.getInstance("https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
+
 
         setUI();
     }
@@ -74,6 +91,7 @@ public class SignInActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
+                                    //createUser(email);
                                     finish();
                                 } else {
                                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -86,7 +104,41 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+public void createUser(String email) {
 
+        Users user = new Users(email);
+
+        myRef.child("users").child("user1").setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Realtime", "Añadido correctamente");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Realtime", "Error al añadir: " + e);
+            }
+        });
+}
+ /*   public void createUser(String email) {
+
+        Map<String, Object> user = new HashMap<>();
+
+        user.put("email", email);
+
+        db.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d("DB", "Add correctly with ID:" + documentReference.getId());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("DB", "Error adding document: " + e);
+            }
+        });
+    }
+*/
     private void errorToast(String errorCode) {
 
         switch (errorCode) {
@@ -108,7 +160,7 @@ public class SignInActivity extends AppCompatActivity {
                 break;
 
             case "ERROR_INVALID_EMAIL":
-                Toast.makeText(SignInActivity.this, R.string.ERROR_INVALID_EMAIL , Toast.LENGTH_LONG).show();
+                Toast.makeText(SignInActivity.this, R.string.ERROR_INVALID_EMAIL, Toast.LENGTH_LONG).show();
                 emailET.setError(String.valueOf(R.string.ERROR_INVALID_EMAIL));
                 emailET.requestFocus();
                 break;
@@ -133,7 +185,7 @@ public class SignInActivity extends AppCompatActivity {
                 break;
 
             case "ERROR_EMAIL_ALREADY_IN_USE":
-                Toast.makeText(SignInActivity.this, R.string.ERROR_EMAIL_ALREADY_IN_USE , Toast.LENGTH_LONG).show();
+                Toast.makeText(SignInActivity.this, R.string.ERROR_EMAIL_ALREADY_IN_USE, Toast.LENGTH_LONG).show();
                 emailET.setError(String.valueOf(R.string.ERROR_EMAIL_ALREADY_IN_USE));
                 emailET.requestFocus();
                 break;

@@ -29,16 +29,16 @@ public class LobbyActivity extends AppCompatActivity {
             Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
             startActivity(authIntent);
         }
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+/*        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             finish();
-        }
+        }*/
 
         setContentView(R.layout.multiplayer_lobby_layout);
 
         setLobbyUI();
     }
 
-    @Override
+/*    @Override
     protected void onRestart() {
         super.onRestart();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
@@ -52,7 +52,7 @@ public class LobbyActivity extends AppCompatActivity {
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             finish();
         }
-    }
+    }*/
 
     private void setLobbyUI() {
         Button signOutButton = findViewById(R.id.sign_out_bt);
