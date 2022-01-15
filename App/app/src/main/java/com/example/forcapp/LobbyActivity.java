@@ -7,23 +7,34 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.forcapp.dao.FirebaseDAO;
+import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Partida;
+import com.example.forcapp.entity.Word;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 public class LobbyActivity extends AppCompatActivity {
 
     FirebaseDAO firebaseDAO;
+    private String randomWord;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +46,7 @@ public class LobbyActivity extends AppCompatActivity {
 /*        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             finish();
         }*/
-
+        getRandomWord();
         firebaseDAO = new FirebaseDAO();
 
         setContentView(R.layout.multiplayer_lobby_layout);
@@ -85,9 +96,9 @@ public class LobbyActivity extends AppCompatActivity {
                      * Crear sala como host
                      */
                     createLobby();
-
-                    if (isInternetAvailable())
-                        startGame();
+                    //Por ahora que vaya al preGame
+                    // if (isInternetAvailable())
+                    //startGame();
 
 
                 }
@@ -139,10 +150,41 @@ public class LobbyActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void createLobby() {
-        Partida partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(),"hola", 1);
-        firebaseDAO.createGame(partida);
+    private int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 
+    public void getRandomWord() {
+        class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
+
+            @Override
+            protected List<Word> doInBackground(Void... voids) {
+                List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
+                if (words.size() == 0) {
+                    words = Dictionary.defaulWordList;
+                }
+                return words;
+            }
+
+            @Override
+            protected void onPostExecute(List<Word> words) {
+                super.onPostExecute(words); // Actualizar la UI
+                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
+
+            }
+
+        }
+        GetRandomWord gf = new GetRandomWord(); // Crear una instancia y ejecutar
+        gf.execute();
+    }
+
+    private void createLobby() {
+
+        Partida partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(), randomWord, 1);
+        firebaseDAO.createGame(partida);
+        Intent preGameIntent = new Intent(getApplicationContext(), PreGameActivity.class);
+        finish();
+        startActivity(preGameIntent);
     }
 
     private void startGame() {
