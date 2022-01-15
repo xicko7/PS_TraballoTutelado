@@ -23,7 +23,9 @@ import com.example.forcapp.entity.Partida;
 import com.example.forcapp.entity.Word;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LobbyActivity extends AppCompatActivity {
 
@@ -165,7 +167,7 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
-                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
+                //randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
 
             }
 

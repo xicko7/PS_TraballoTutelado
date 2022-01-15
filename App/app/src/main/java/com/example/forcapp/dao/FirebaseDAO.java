@@ -4,19 +4,27 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.room.Update;
 
 import com.example.forcapp.LobbyActivity;
 import com.example.forcapp.R;
 import com.example.forcapp.entity.Partida;
 import com.example.forcapp.entity.Users;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
+
+//TODO Eliminar strings estáticos e crealos comos recursos
 public class FirebaseDAO {
 
     private final DatabaseReference databaseReference;
@@ -114,5 +122,31 @@ public class FirebaseDAO {
         gf.execute();
         return partidaId;
     }
+
+
+
+    public Partida getGameById(String partidaId) {
+        return databaseReference.child("Partida").child(partidaId).get().getResult().getValue(Partida.class);
+    }
+
+
+    public void updateGame(String partidaId, Map<String, Object> hashMap) {
+        class UpdateGame extends AsyncTask<Void, Void, Void> { // claseinterna
+            @Override
+            protected Void doInBackground(Void... voids) {
+                databaseReference.child("Partida").child(partidaId).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Realtime", "Datos actualizados correctamente");
+                    }
+                });
+                return null;
+            }
+
+        }
+        UpdateGame gf = new UpdateGame();
+        gf.execute();
+    }
+
 
 }
