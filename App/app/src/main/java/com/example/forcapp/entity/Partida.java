@@ -1,6 +1,9 @@
 package com.example.forcapp.entity;
 
-public class Partida {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Partida implements Parcelable {
 
     private boolean repeat1;
     private boolean repeat2;
@@ -35,7 +38,7 @@ public class Partida {
         this.repeat1 = repeat1;
     }
 
-    public Partida(String player1, String randomWord, int numPlayers ) {
+    public Partida(String player1, String randomWord, int numPlayers) {
         this.player1 = player1;
         this.player2 = "null";
         this.randomWord = randomWord;
@@ -129,4 +132,54 @@ public class Partida {
     public void setReadyPlayer2(boolean readyPlayer2) {
         isReadyPlayer2 = readyPlayer2;
     }
+
+    public Partida(Parcel in) {
+        String[] data = new String[12];
+
+        in.readStringArray(data);
+        this.player1 = data[0];
+        this.player2 = data[1];
+        this.randomWord = data[2];
+        this.letrasAcertadas1 = data[3];
+        this.letrasAcertadas2 = data[5];
+        this.ganador = data[5];
+        this.numPlayers = Integer.parseInt(data[6]);
+        this.isReadyPlayer1 = Boolean.parseBoolean(data[7]);
+        this.isReadyPlayer2 = Boolean.parseBoolean(data[8]);
+        this.isFinished = Boolean.parseBoolean(data[9]);
+        this.repeat1 = Boolean.parseBoolean(data[10]);
+        this.repeat2 = Boolean.parseBoolean(data[11]);
+    }
+
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{
+                this.player1,
+                this.player2,
+                this.randomWord,
+                this.letrasAcertadas1,
+                this.letrasAcertadas2,
+                this.ganador,
+                String.valueOf(this.numPlayers),
+                String.valueOf(this.isReadyPlayer1),
+                String.valueOf(this.isReadyPlayer2),
+                String.valueOf(this.isFinished),
+                String.valueOf(this.repeat1),
+                String.valueOf(this.repeat2)});
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Partida createFromParcel(Parcel in) {
+            return new Partida(in);
+        }
+
+        public Partida[] newArray(int size) {
+            return new Partida[size];
+        }
+    };
+
 }

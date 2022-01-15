@@ -44,7 +44,6 @@ public class LobbyActivity extends AppCompatActivity {
         firebaseDAO = new FirebaseDAO();
 
         setContentView(R.layout.multiplayer_lobby_layout);
-
         setLobbyUI();
     }
 
@@ -61,9 +60,6 @@ public class LobbyActivity extends AppCompatActivity {
         super.onResume();
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
-        }
-        if (partida != null && partida.isFinished()) {
-            firebaseDAO.removeGame();
         }
     }
 
@@ -89,11 +85,7 @@ public class LobbyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isInternetAvailable()) {
-                    /*
-                     * Crear sala como host
-                     */
                     createLobby();
-                    //Por ahora que vaya al preGame
                     // if (isInternetAvailable())
                     //startGame();
 
@@ -129,6 +121,10 @@ public class LobbyActivity extends AppCompatActivity {
                     /*
                      * Unirse a sala con "code"
                      */
+                    Intent preGameIntent = new Intent(getApplicationContext(), PreGameActivity.class);
+                    preGameIntent.putExtra("id", partidaId);
+                    preGameIntent.putExtra("partida", partida);
+                    startActivity(preGameIntent);
 
                     if (isInternetAvailable())
                         startGame();
@@ -179,6 +175,8 @@ public class LobbyActivity extends AppCompatActivity {
         partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(), randomWord, 1);
         partidaId = firebaseDAO.createGame(partida);
         Intent preGameIntent = new Intent(getApplicationContext(), PreGameActivity.class);
+        preGameIntent.putExtra("id", partidaId);
+        preGameIntent.putExtra("partida", partida);
         startActivity(preGameIntent);
     }
 
