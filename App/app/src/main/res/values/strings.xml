@@ -93,4 +93,10 @@
     <string name="ERROR_OPERATION_NOT_ALLOWED">Esta operación non está permitida. Debes habilitar o servizo na consola.</string>
     <string name="ERROR_WEAK_PASSWORD">O contrasinal non é valido.</string>
     <string name="ERROR_MIN_6CHARS">O contrasinal non é valido, debe ter polo menos 6 caracteres.</string>
+    <string name="player_1">Xogador 1:</string>
+    <string name="listo">Listo</string>
+    <string name="xogadores_listos">Xogadores listos:</string>
+    <string name="player_2">Xogador 2:</string>
+    <string name="email">email</string>
+    <string name="id_partida">ID PARTIDA</string>
 </resources>

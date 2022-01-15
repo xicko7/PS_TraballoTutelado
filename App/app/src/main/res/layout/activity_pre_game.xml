@@ -14,10 +14,11 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
         android:gravity="center_horizontal"
-
-        android:text="PARTIDA ID"
+        android:minHeight="48dp"
+        android:text="@string/id_partida"
         android:textIsSelectable="true"
-        android:textSize="30dp"
+        android:textSize="30sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,43 +27,45 @@
         android:id="@+id/player1_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Player 1: "
-        android:textSize="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="106dp"
+        android:text="@string/player_1"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/partidaId_tv"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/emailPlayer1_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Email player 1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:text="@string/email"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/player1_tv"
-        app:layout_constraintTop_toBottomOf="@+id/partidaId_tv"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/partidaId_tv" />
 
     <TextView
         android:id="@+id/player2_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Player 2: "
-        android:textSize="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="163dp"
+        android:text="@string/player_2"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player1_tv"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="30dp"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/emailPlayer2_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        android:text="Email player 2 "
-        android:textSize="20dp"
+        android:text="@string/email"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintStart_toEndOf="@+id/player2_tv"
         app:layout_constraintTop_toBottomOf="@+id/emailPlayer1_tv" />
 
@@ -70,38 +73,50 @@
         android:id="@+id/numPlayers_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Numero de jugadores "
-        android:textSize="25dp"
-        android:gravity="center"
         android:layout_marginHorizontal="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="220dp"
+        android:gravity="center"
+        android:text="@string/xogadores_listos"
+        android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailPlayer2_tv" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/ready_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Listo! "
-        android:textSize="25dp"
-        android:gravity="center"
-        android:layout_marginHorizontal="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numPlayers_tv" />
-
-    <Button
+        android:id="@+id/ready_player1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Ready"
+        android:layout_marginTop="264dp"
+        android:layout_marginEnd="228dp"
+        android:text="@string/email"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ready_tv" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/ready_player2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="316dp"
+        android:layout_marginEnd="228dp"
+        android:text="@string/email"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/boton_listo"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="384dp"
+        android:layout_marginEnd="104dp"
+        android:text="@string/listo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
