@@ -16,9 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ForcApp">
         <activity
-            android:name=".PreGameActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
@@ -63,6 +60,11 @@
             android:exported="true"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".PreGameActivity"
+            android:exported="true"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

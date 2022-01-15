@@ -1,9 +1,9 @@
 package com.example.forcapp.entity;
 
-import android.util.Log;
-
 public class Partida {
 
+    private boolean repeat1;
+    private boolean repeat2;
     private String player1;
     private String player2;
     private String randomWord;
@@ -13,9 +13,26 @@ public class Partida {
     private int numPlayers;
     private boolean isReadyPlayer1;
     private boolean isReadyPlayer2;
+    private boolean isFinished;
 
 
     public Partida() {
+    }
+
+    public boolean isRepeat2() {
+        return repeat2;
+    }
+
+    public void setRepeat2(boolean repeat2) {
+        this.repeat2 = repeat2;
+    }
+
+    public boolean isRepeat1() {
+        return repeat1;
+    }
+
+    public void setRepeat1(boolean repeat1) {
+        this.repeat1 = repeat1;
     }
 
     public Partida(String player1, String randomWord, int numPlayers ) {
@@ -28,6 +45,17 @@ public class Partida {
         this.numPlayers = numPlayers;
         this.isReadyPlayer1 = false;
         this.isReadyPlayer2 = false;
+        this.isFinished = false;
+        this.repeat1 = false;
+        this.repeat2 = false;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
     }
 
     public String getPlayer1() {

@@ -99,4 +99,5 @@
     <string name="player_2">Xogador 2:</string>
     <string name="email">email</string>
     <string name="id_partida">ID PARTIDA</string>
+    <string name="database_link">https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/</string>
 </resources>

@@ -2,18 +2,15 @@ package com.example.forcapp.dao;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.forcapp.WordsAdapter;
-import com.example.forcapp.database.WordDatabaseClient;
+import com.example.forcapp.LobbyActivity;
+import com.example.forcapp.R;
 import com.example.forcapp.entity.Partida;
 import com.example.forcapp.entity.Users;
-import com.example.forcapp.entity.Word;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,12 +19,28 @@ import java.util.Map;
 
 public class FirebaseDAO {
 
-    private DatabaseReference databaseReference;
+    private final DatabaseReference databaseReference;
     private String partidaId;
-    private final String DATABASE_LINK = "https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/";
+
     public FirebaseDAO() {
+        String DATABASE_LINK = "https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/";
         FirebaseDatabase db = FirebaseDatabase.getInstance(DATABASE_LINK);
         databaseReference = db.getReference();
+    }
+
+    public void removeGame() {
+        databaseReference.child("Partida").child(LobbyActivity.partidaId).removeValue()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Realtime", "Eliminado correctamente");
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Realtime", "Error ao eliminar: " + e);
+            }
+        });
     }
 
     public void addUser(Users user) {
@@ -57,7 +70,6 @@ public class FirebaseDAO {
         gf.execute();
     }
 
-    /*TODO Hay que facer que este método devolva a partidaId para ser máis facil para pasarlla á Actividad de PREGAME */
     public String createGame(Partida partida) {
 
         class CreateGame extends AsyncTask<Void, Void, String> { // claseinterna
@@ -81,6 +93,9 @@ public class FirebaseDAO {
                 partidaMap.put("numPlayers", partida.getNumPlayers());
                 partidaMap.put("isReadyPLayer1", partida.isReadyPlayer1());
                 partidaMap.put("isReadyPlayer2", partida.isReadyPlayer2());
+                partidaMap.put("isFinished", partida.isFinished());
+                partidaMap.put("repeat1", partida.isRepeat1());
+                partidaMap.put("repeat2", partida.isRepeat2());
                 databaseReference.child("Partida").child(partidaId).updateChildren(partidaMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -99,6 +114,5 @@ public class FirebaseDAO {
         gf.execute();
         return partidaId;
     }
-
 
 }

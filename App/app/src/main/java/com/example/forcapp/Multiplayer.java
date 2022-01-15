@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.database.WordDatabaseClient;
 import com.example.forcapp.entity.Word;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -47,10 +46,12 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     private final Collator myCollator = Collator.getInstance();
     private boolean gameFinished;
     private int code;
+    private List<Word> randomWords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getRandomWord();
         isInternetAvailable();
 
         setContentView(R.layout.multiplayer_layout);
@@ -58,6 +59,19 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
         setGameUI();
         startGame();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DatabaseReference databaseReference;
+        FirebaseDatabase db = FirebaseDatabase.getInstance(String.valueOf(R.string.database_link));
+        databaseReference = db.getReference();
+        databaseReference.child("Partida").child(LobbyActivity.partidaId).removeValue();
+        /*
+        BORRAR PARTIDA DA BASE DE DATOS
+         */
+
     }
 
     private void startGame() {
@@ -70,7 +84,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         LetterAdapter adapter = new LetterAdapter(getApplicationContext());
         gridView.setAdapter(adapter);
         wordLayout = findViewById(R.id.layout_words_mp);
-        getRandomWord();
         gameFinished = false;
     }
 
@@ -96,6 +109,20 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
             faults.add(imageViewIcon);
 
+        }
+
+        //randomWord = LobbyActivity.partida.getRandomWord();
+
+        for (int i = 0; i < randomWord.length(); i++) {
+            charViews.add(new TextView(getApplicationContext()));
+            charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
+            charViews.get(i).append(String.valueOf(randomWord.charAt(i)).toUpperCase());
+
+            charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            charViews.get(i).setGravity(Gravity.CENTER);
+            charViews.get(i).setTextColor(Color.WHITE);
+            charViews.get(i).setTextSize(25);
+            wordLayout.addView(charViews.get(i));
         }
     }
 
@@ -210,33 +237,15 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     }
 
     @Override
-    public void getRandomWord() {
+    public void getRandomWord() { // Todas as palabras posibles
         class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
             @Override
             protected List<Word> doInBackground(Void... voids) {
-                List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
-                if (words.size() == 0) {
-                    words = Dictionary.defaulWordList;
+                randomWords = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
+                if (randomWords.size() == 0) {
+                    randomWords = Dictionary.defaulWordList;
                 }
-                return words;
-            }
-
-            @Override
-            protected void onPostExecute(List<Word> words) {
-                super.onPostExecute(words); // Actualizar la UI
-                randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
-
-                for (int i = 0; i < randomWord.length(); i++) {
-                    charViews.add(new TextView(getApplicationContext()));
-                    charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);
-                    charViews.get(i).append(String.valueOf(randomWord.charAt(i)).toUpperCase());
-
-                    charViews.get(i).setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    charViews.get(i).setGravity(Gravity.CENTER);
-                    charViews.get(i).setTextColor(Color.WHITE);
-                    charViews.get(i).setTextSize(25);
-                    wordLayout.addView(charViews.get(i));
-                }
+                return randomWords;
             }
         }
 
@@ -261,6 +270,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                //LobbyActivity.partida.setFinished(true);
                 finish();
             }
         });
@@ -284,17 +294,24 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = getIntent();
+                //LobbyActivity.partida.setFinished(true);
                 finish();
-                startActivity(intent);
             }
         });
         builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                /*
-                 * Deberiase repetir a mesma partida cos xogadores que pulsasen este botón
-                 */
+                //if (LobbyActivity.partida.getPlayer1().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+                    //LobbyActivity.partida.setRepeat1(true);
+                    //while(LobbyActivity.partida.getPlayer1())
+                    //LobbyActivity.partida.setRandomWord(randomWords.get(getRandomNumber(0, randomWords.size() - 1)).getWord());
+                //}
+
+                //if (LobbyActivity.partida.isRepeat1() && repeat2)...
+                Intent intent = getIntent();
+
+                finish();
+                startActivity(intent);
             }
         });
         AlertDialog alert = builder.create();
@@ -310,17 +327,20 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = getIntent();
+                //LobbyActivity.partida.setFinished(true);
                 finish();
-                startActivity(intent);
             }
         });
         builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                /*
-                 * Deberiase repetir a mesma partida cos xogadores que pulsasen este botón
-                 */
+                // if (repat1 && repeat2)...
+                getRandomWord();
+                //if (LobbyActivity.partida.getPlayer1().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
+                    //LobbyActivity.partida.setRandomWord(randomWords.get(getRandomNumber(0, randomWords.size() - 1)).getWord());
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             }
         });
         AlertDialog alert = builder.create();

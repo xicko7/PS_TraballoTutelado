@@ -1,26 +1,21 @@
 package com.example.forcapp;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.dao.FirebaseDAO;
 import com.example.forcapp.database.WordDatabaseClient;
@@ -34,7 +29,7 @@ public class LobbyActivity extends AppCompatActivity {
 
     FirebaseDAO firebaseDAO;
     private String randomWord;
-    public static Partida partida;
+    public Partida partida;
     public static String partidaId;
 
     @Override
@@ -45,9 +40,6 @@ public class LobbyActivity extends AppCompatActivity {
             Intent authIntent = new Intent(getApplicationContext(), AuthActivity.class);
             startActivity(authIntent);
         }
-/*        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            finish();
-        }*/
         getRandomWord();
         firebaseDAO = new FirebaseDAO();
 
@@ -56,10 +48,10 @@ public class LobbyActivity extends AppCompatActivity {
         setLobbyUI();
     }
 
-/*    @Override
+    @Override
     protected void onRestart() {
         super.onRestart();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
         }
     }
@@ -67,10 +59,13 @@ public class LobbyActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             finish();
         }
-    }*/
+        if (partida != null && partida.isFinished()) {
+            firebaseDAO.removeGame();
+        }
+    }
 
     private void setLobbyUI() {
         Button signOutButton = findViewById(R.id.sign_out_bt);
@@ -125,7 +120,6 @@ public class LobbyActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
         builder.setView(input);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
@@ -185,7 +179,6 @@ public class LobbyActivity extends AppCompatActivity {
         partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(), randomWord, 1);
         partidaId = firebaseDAO.createGame(partida);
         Intent preGameIntent = new Intent(getApplicationContext(), PreGameActivity.class);
-        finish();
         startActivity(preGameIntent);
     }
 

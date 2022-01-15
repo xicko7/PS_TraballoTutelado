@@ -86,26 +86,26 @@
         android:id="@+id/ready_player1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="264dp"
-        android:layout_marginEnd="228dp"
         android:text="@string/email"
         android:textAlignment="center"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/ready_player2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
         android:layout_marginTop="316dp"
-        android:layout_marginEnd="228dp"
         android:text="@string/email"
         android:textAlignment="center"
         android:textSize="20sp"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
