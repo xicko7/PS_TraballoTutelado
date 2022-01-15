@@ -15,7 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ForcApp">
-
+        <activity
+            android:name=".PreGameActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -50,7 +52,7 @@
             android:name=".AuthActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SignInActivity"
             android:exported="true"

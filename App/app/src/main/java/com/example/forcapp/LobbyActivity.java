@@ -17,10 +17,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.forcapp.dao.FirebaseDAO;
+import com.example.forcapp.entity.Partida;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LobbyActivity extends AppCompatActivity {
 
+    FirebaseDAO firebaseDAO;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +35,8 @@ public class LobbyActivity extends AppCompatActivity {
 /*        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             finish();
         }*/
+
+        firebaseDAO = new FirebaseDAO();
 
         setContentView(R.layout.multiplayer_lobby_layout);
 
@@ -135,6 +140,9 @@ public class LobbyActivity extends AppCompatActivity {
     }
 
     private void createLobby() {
+        Partida partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(),"hola", 1);
+        firebaseDAO.createGame(partida);
+
     }
 
     private void startGame() {

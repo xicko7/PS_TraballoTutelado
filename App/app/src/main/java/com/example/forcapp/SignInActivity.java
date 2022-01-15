@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.example.forcapp.dao.FirebaseDAO;
 import com.example.forcapp.entity.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     EditText emailET, passwordET;
     FirebaseAuth firebaseAuth;
     AwesomeValidation awesomeValidation;
-    DatabaseReference myRef;
+    FirebaseDAO daoFirebase;
     //FirebaseFirestore db = FirebaseFirestore.getInstance(); VERSION UTILIZANDO CLOUD FIRESTORE
 
 
@@ -51,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         //VERSION UTILIZANDO REALTIME DATABASE
-        myRef = FirebaseDatabase.getInstance("https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        daoFirebase = new FirebaseDAO();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
 
@@ -91,7 +92,9 @@ public class SignInActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
-                                    //createUser(email);
+                                    daoFirebase.addUser(new Users(email));
+
+
                                     finish();
                                 } else {
                                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -104,7 +107,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
-public void createUser(String email) {
+/*public void createUser(String email) {
 
         Users user = new Users(email);
 
@@ -119,7 +122,7 @@ public void createUser(String email) {
                 Log.d("Realtime", "Error al añadir: " + e);
             }
         });
-}
+}*/
  /*   public void createUser(String email) {
 
         Map<String, Object> user = new HashMap<>();
