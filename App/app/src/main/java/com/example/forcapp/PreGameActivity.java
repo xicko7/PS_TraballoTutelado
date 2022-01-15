@@ -18,11 +18,22 @@ public class PreGameActivity extends AppCompatActivity {
     Button boton_listo;
     Partida partida;
     private String partidaId;
+    private FirebaseDAO firebaseDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (getIntent().getStringExtra("id") != null)
+            partidaId = getIntent().getStringExtra("id");
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.getParcelable("partida") != null)
+            partida = (Partida) bundle.getParcelable("partida");
+
+
         setContentView(R.layout.activity_pre_game);
+        firebaseDAO = new FirebaseDAO();
         setUI();
     }
 
@@ -44,7 +55,7 @@ public class PreGameActivity extends AppCompatActivity {
 
         TextView tv_emailPlayer2;
         if (!partida.getPlayer2().equals("null")) {
-             // email jugador 1
+            // email jugador 1
             tv_emailPlayer2 = findViewById(R.id.emailPlayer2_tv);
             tv_emailPlayer2.setText(partida.getPlayer2());
             tv_emailPlayer2.setVisibility(View.VISIBLE);
@@ -98,4 +109,5 @@ public class PreGameActivity extends AppCompatActivity {
         alert.show();
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.forcapp.dao;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -14,6 +15,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,8 +39,8 @@ public class FirebaseDAO {
         databaseReference = db.getReference();
     }
 
-    public void removeGame() {
-        databaseReference.child("Partida").child(LobbyActivity.partidaId).removeValue()
+    public void removeGame(String id) {
+        databaseReference.child("Partida").child(id).removeValue()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -113,6 +116,21 @@ public class FirebaseDAO {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("Realtime", "Error al añadir: " + e);
+                    }
+                });
+
+                databaseReference.child("Partida").child(partidaId).child("isFinished").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            if (snapshot.getValue().equals(true))
+                                removeGame(partidaId);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
                 return partidaId;
