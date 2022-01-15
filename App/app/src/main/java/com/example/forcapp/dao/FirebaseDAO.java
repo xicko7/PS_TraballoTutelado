@@ -23,8 +23,8 @@ import java.util.Map;
 public class FirebaseDAO {
 
     private DatabaseReference databaseReference;
+    private String partidaId;
     private final String DATABASE_LINK = "https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/";
-
     public FirebaseDAO() {
         FirebaseDatabase db = FirebaseDatabase.getInstance(DATABASE_LINK);
         databaseReference = db.getReference();
@@ -58,11 +58,19 @@ public class FirebaseDAO {
     }
 
     /*TODO Hay que facer que este método devolva a partidaId para ser máis facil para pasarlla á Actividad de PREGAME */
-    public void createGame(Partida partida) {
+    public String createGame(Partida partida) {
+
         class CreateGame extends AsyncTask<Void, Void, String> { // claseinterna
+
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                partidaId = databaseReference.child("Partida").push().getKey();
+            }
+
             @Override
             protected String doInBackground(Void... voids) {
-                String partidaId = databaseReference.child("Partida").push().getKey();
                 Map<String, Object> partidaMap = new HashMap<>();
                 partidaMap.put("player1", partida.getPlayer1());
                 partidaMap.put("player2", partida.getPlayer2());
@@ -89,6 +97,7 @@ public class FirebaseDAO {
         }
         CreateGame gf = new CreateGame();
         gf.execute();
+        return partidaId;
     }
 
 

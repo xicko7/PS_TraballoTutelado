@@ -1,5 +1,7 @@
 package com.example.forcapp.entity;
 
+import android.util.Log;
+
 public class Partida {
 
     private String player1;

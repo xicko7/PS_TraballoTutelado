@@ -34,6 +34,8 @@ public class LobbyActivity extends AppCompatActivity {
 
     FirebaseDAO firebaseDAO;
     private String randomWord;
+    public static Partida partida;
+    public static String partidaId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,8 +182,8 @@ public class LobbyActivity extends AppCompatActivity {
 
     private void createLobby() {
 
-        Partida partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(), randomWord, 1);
-        firebaseDAO.createGame(partida);
+        partida = new Partida(FirebaseAuth.getInstance().getCurrentUser().getEmail(), randomWord, 1);
+        partidaId = firebaseDAO.createGame(partida);
         Intent preGameIntent = new Intent(getApplicationContext(), PreGameActivity.class);
         finish();
         startActivity(preGameIntent);
