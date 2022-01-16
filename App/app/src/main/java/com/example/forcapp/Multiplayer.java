@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.forcapp.dao.FirebaseDAO;
 import com.example.forcapp.entity.Partida;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,6 +48,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     private boolean gameFinished;
     private Partida partida;
     private FirebaseDAO firebaseDAO;
+    String wordList1 = "";
+    String wordList2 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,14 +153,14 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     public void onBackPressed() {
         if (!gameFinished)
             createExitDialog();
-        else{
+        else {
             partida.setFinished(true);
             firebaseDAO.updateGame(partidaId, partida);
             finish();
         }
     }
 
-    void setDatabaseListeners(DatabaseReference ref){
+    void setDatabaseListeners(DatabaseReference ref) {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -222,6 +225,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             view.setEnabled(false);
             view.setVisibility(View.GONE);
 
+
             boolean correcto = false;
 
 
@@ -230,6 +234,25 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                     correcto = true;
                     numCorrectos++;
                     charViews.get(i).setTextColor(Color.BLACK);
+                    if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equalsIgnoreCase(partida.getPlayer1())) {
+                        if (wordList1.equalsIgnoreCase("null") || wordList1.isEmpty()) {
+                            wordList1 = charViews.get(i).getText().toString();
+                        } else {
+                            wordList1 = wordList1 + ", " + letter;
+
+                        }
+                        firebaseDAO.updateWords1(partidaId, wordList1);
+
+                    } else if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equalsIgnoreCase(partida.getPlayer2())) {
+                        if (wordList2.equalsIgnoreCase("null") || wordList2.isEmpty()) {
+                            wordList2 = charViews.get(i).getText().toString();
+                        } else {
+                            wordList2 = wordList2 + ", " + letter;
+
+                        }
+                        firebaseDAO.updateWords2(partidaId, wordList2);
+
+                    }
                 }
             }
 

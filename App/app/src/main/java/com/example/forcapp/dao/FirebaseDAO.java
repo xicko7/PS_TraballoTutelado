@@ -191,6 +191,48 @@ public class FirebaseDAO {
         }
     }
 
+    public void updateWords1(String partidaId, String wordList) {
+        class AddUser extends AsyncTask<Void, Void, Users> { // claseinterna
+            @Override
+            protected Users doInBackground(Void... voids) {
+                Map<String, Object> letrasMap;
+                letrasMap = new HashMap<>();
+                letrasMap.put("letrasAcertadas1", wordList);
+                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Users user) {
+                super.onPostExecute(user);
+            }
+        }
+        AddUser gf = new AddUser();
+        gf.execute();
+    }
+
+    public void updateWords2(String partidaId, String wordList) {
+        class AddUser extends AsyncTask<Void, Void, Users> { // claseinterna
+            @Override
+            protected Users doInBackground(Void... voids) {
+                Map<String, Object> letrasMap;
+                letrasMap = new HashMap<>();
+                letrasMap.put("letrasAcertadas2", wordList);
+                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Users user) {
+                super.onPostExecute(user);
+            }
+        }
+        AddUser gf = new AddUser();
+        gf.execute();
+    }
+
+
+
 
     public void player2Ready(String partidaId) {
         Map<String, Object> partidaMap;
