@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -48,8 +49,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     private boolean gameFinished;
     private Partida partida;
     private FirebaseDAO firebaseDAO;
-    String wordList1 = "";
-    String wordList2 = "";
+    String wordList1;
+    String wordList2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +80,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         faults = new ArrayList();
         charViews = new ArrayList();
 
+
         setGameUI();
         startGame();
     }
@@ -94,6 +96,24 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         gridView.setAdapter(adapter);
         wordLayout = findViewById(R.id.layout_words_mp);
         gameFinished = false;
+        wordList1 = "";
+        wordList2 = "";
+
+        /*thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true)
+                    try {
+                        Thread.sleep(100);
+                        setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
+                        Log.d("Thread", "Estoy entrando en el Thread");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+            }
+        });
+        thread.start();*/
     }
 
     private void setGameUI() {
@@ -136,6 +156,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         }
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {// Respond to the action bar's Up/Home button
@@ -170,6 +191,29 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "Erro nas bases de datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        ref.child("ganador").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+                    Log.d("Thread", "Entré en el listener");
+                    //thread.interrupt();
+                    //TODO aqui termina a partida, porque si estaba dentro dos dialogs petaba ao salir da primeiro dunha e despois doutra.
+                    partida.setFinished(true);
+                    firebaseDAO.updateGame(partidaId, partida);
+                    createWinnerDialog();
+                }
+
+                if (snapshot.exists() && !snapshot.getValue().equals("null") && !snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
+                    createGameOverDialog();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -260,7 +304,10 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                 if (numCorrectos == randomWord.length()) {
                     disableButtons();
                     gameFinished = true;
-                    createWinnerDialog();
+                    firebaseDAO.setWinner(partidaId, FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    //createWinnerDialog();
+
+
                 }
             } else if (intentos < 10) {
                 faults.get(intentos).setVisibility(View.VISIBLE);
@@ -269,8 +316,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                 faults.get(intentos).setVisibility(View.VISIBLE);
                 disableButtons();
                 gameFinished = true;
-                createGameOverDialog();
-
+                //createGameOverDialog();
             }
         }
 
@@ -286,6 +332,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     @Override
     public void createExitDialog() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.exit) + "?");
 
@@ -304,13 +351,12 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     @Override
     public void createGameOverDialog() {
+        disableButtons();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.game_over));
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
-            partida.setFinished(true);
-            firebaseDAO.updateGame(partidaId, partida);
             finish();
         });
         AlertDialog alert = builder.create();
@@ -319,13 +365,12 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     @Override
     public void createWinnerDialog() {
+        disableButtons();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.game_winner);
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
-            partida.setFinished(true);
-            firebaseDAO.updateGame(partidaId, partida);
             finish();
         });
         AlertDialog alert = builder.create();
@@ -353,5 +398,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         finish();
         startActivity(homeIntent);
     }
+
 
 }

@@ -1,22 +1,15 @@
 package com.example.forcapp.dao;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.Update;
 
-import com.example.forcapp.LobbyActivity;
-import com.example.forcapp.R;
 import com.example.forcapp.entity.Partida;
 import com.example.forcapp.entity.Users;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -191,49 +184,6 @@ public class FirebaseDAO {
         }
     }
 
-    public void updateWords1(String partidaId, String wordList) {
-        class AddUser extends AsyncTask<Void, Void, Users> { // claseinterna
-            @Override
-            protected Users doInBackground(Void... voids) {
-                Map<String, Object> letrasMap;
-                letrasMap = new HashMap<>();
-                letrasMap.put("letrasAcertadas1", wordList);
-                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Users user) {
-                super.onPostExecute(user);
-            }
-        }
-        AddUser gf = new AddUser();
-        gf.execute();
-    }
-
-    public void updateWords2(String partidaId, String wordList) {
-        class AddUser extends AsyncTask<Void, Void, Users> { // claseinterna
-            @Override
-            protected Users doInBackground(Void... voids) {
-                Map<String, Object> letrasMap;
-                letrasMap = new HashMap<>();
-                letrasMap.put("letrasAcertadas2", wordList);
-                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Users user) {
-                super.onPostExecute(user);
-            }
-        }
-        AddUser gf = new AddUser();
-        gf.execute();
-    }
-
-
-
-
     public void player2Ready(String partidaId) {
         Map<String, Object> partidaMap;
 
@@ -246,6 +196,57 @@ public class FirebaseDAO {
             e.printStackTrace();
         }
     }
+
+    public void updateWords1(String partidaId, String wordList) {
+        class AddUser extends AsyncTask<Void, Void, Void> { // claseinterna
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Map<String, Object> letrasMap;
+                letrasMap = new HashMap<>();
+                letrasMap.put("letrasAcertadas1", wordList);
+                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
+                return null;
+            }
+
+        }
+        AddUser gf = new AddUser();
+        gf.execute();
+    }
+
+    public void updateWords2(String partidaId, String wordList) {
+        class AddUser extends AsyncTask<Void, Void, Void> { // claseinterna
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Map<String, Object> letrasMap;
+                letrasMap = new HashMap<>();
+                letrasMap.put("letrasAcertadas2", wordList);
+                databaseReference.child("Partida").child(partidaId).updateChildren(letrasMap);
+                return null;
+            }
+
+        }
+        AddUser gf = new AddUser();
+        gf.execute();
+    }
+
+    public void setWinner(String partidaId, String email) {
+        class AddUser extends AsyncTask<Void, Void, Void> { // claseinterna
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Map<String, Object> ganadorMap;
+                ganadorMap = new HashMap<>();
+                ganadorMap.put("ganador", email);
+                databaseReference.child("Partida").child(partidaId).updateChildren(ganadorMap);
+                return null;
+            }
+
+        }
+        AddUser gf = new AddUser();
+        gf.execute();
+    }
+
+
+
 
 
 }
