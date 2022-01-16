@@ -1,12 +1,10 @@
 package com.example.forcapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,57 +23,65 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.forcapp.database.WordDatabaseClient;
-import com.example.forcapp.entity.Word;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.forcapp.dao.FirebaseDAO;
+import com.example.forcapp.entity.Partida;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     private int intentos, numCorrectos;
-    private String randomWord;
+    private String randomWord, partidaId;
     private GridView gridView;
-    private final List<ImageView> faults = new ArrayList();
-    private final List<TextView> charViews = new ArrayList();
+    private List<ImageView> faults;
+    private List<TextView> charViews;
     private LinearLayout wordLayout;
     private final Collator myCollator = Collator.getInstance();
     private boolean gameFinished;
-    private int code;
-    private List<Word> randomWords;
+    private Partida partida;
+    private FirebaseDAO firebaseDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getRandomWord();
-        isInternetAvailable();
 
+        if (getIntent().getStringExtra("id") != null)
+            partidaId = getIntent().getStringExtra("id");
+        else
+            goHome();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle.getParcelable("partida") != null)
+            partida = bundle.getParcelable("partida");
+        else
+            goHome();
+        firebaseDAO = new FirebaseDAO();
+        setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
+
+        if (!isInternetAvailable()) {
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
+            goHome();
+        }
         setContentView(R.layout.multiplayer_layout);
-        getSupportActionBar().setTitle(R.string.multiplayer_bt);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.multiplayer_bt);
+
+        faults = new ArrayList();
+        charViews = new ArrayList();
 
         setGameUI();
         startGame();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        DatabaseReference databaseReference;
-        FirebaseDatabase db = FirebaseDatabase.getInstance(String.valueOf(R.string.database_link));
-        databaseReference = db.getReference();
-        databaseReference.child("Partida").child(LobbyActivity.partidaId).removeValue();
-        /*
-        BORRAR PARTIDA DA BASE DE DATOS
-         */
-
-    }
-
     private void startGame() {
-        getSupportActionBar().setTitle(R.string.multiplayer_bt);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.multiplayer_bt);
 
         intentos = 0;
         numCorrectos = 0;
@@ -111,7 +117,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
         }
 
-        //randomWord = LobbyActivity.partida.getRandomWord();
+        randomWord = partida.getRandomWord();
+        wordLayout = findViewById(R.id.layout_words_mp);
 
         for (int i = 0; i < randomWord.length(); i++) {
             charViews.add(new TextView(getApplicationContext()));
@@ -128,18 +135,14 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Respond to the action bar's Up/Home button
-                if (!gameFinished) {
-                    createExitDialog();
-                    return true;
-                } else
-                    return false;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {// Respond to the action bar's Up/Home button
+            if (!gameFinished) {
+                createExitDialog();
+                return true;
+            } else
+                return false;
         }
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -147,8 +150,26 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     public void onBackPressed() {
         if (!gameFinished)
             createExitDialog();
-        else
+        else{
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
             finish();
+        }
+    }
+
+    void setDatabaseListeners(DatabaseReference ref){
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                partida = dataSnapshot.getValue(Partida.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Erro nas bases de datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private class LetterAdapter extends BaseAdapter {
@@ -186,14 +207,11 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             } else {
                 buttonLetter = (Button) view;
             }
-            buttonLetter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (numCorrectos != randomWord.length()) {
-                        tapLetter(letters[i], view);
-                    } else {
-                        createWinnerDialog();
-                    }
+            buttonLetter.setOnClickListener(view1 -> {
+                if (numCorrectos != randomWord.length()) {
+                    tapLetter(letters[i], view1);
+                } else {
+                    createWinnerDialog();
                 }
             });
             buttonLetter.setText(letters[i]);
@@ -201,7 +219,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         }
 
         void tapLetter(String letter, View view) {
-            //Toast.makeText(getApplicationContext(), "Pulsada letra " + letter, Toast.LENGTH_SHORT).show();
             view.setEnabled(false);
             view.setVisibility(View.GONE);
 
@@ -237,24 +254,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     }
 
     @Override
-    public void getRandomWord() { // Todas as palabras posibles
-        class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
-            @Override
-            protected List<Word> doInBackground(Void... voids) {
-                randomWords = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
-                if (randomWords.size() == 0) {
-                    randomWords = Dictionary.defaulWordList;
-                }
-                return randomWords;
-            }
-        }
-
-        GetRandomWord gf = new GetRandomWord(); // Crear una instancia y ejecutar
-        gf.execute();
-
-    }
-
-    @Override
     public void disableButtons() {
         for (int i = 0; i < gridView.getChildCount(); i++) {
             gridView.getChildAt(i).setEnabled(false);
@@ -267,18 +266,13 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.exit) + "?");
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //LobbyActivity.partida.setFinished(true);
-                finish();
-            }
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
+            finish();
         });
-        builder.setNegativeButton(R.string.cont, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        builder.setNegativeButton(R.string.cont, (dialogInterface, i) -> {
 
-            }
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -291,28 +285,10 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setTitle(getString(R.string.game_over));
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //LobbyActivity.partida.setFinished(true);
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //if (LobbyActivity.partida.getPlayer1().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-                    //LobbyActivity.partida.setRepeat1(true);
-                    //while(LobbyActivity.partida.getPlayer1())
-                    //LobbyActivity.partida.setRandomWord(randomWords.get(getRandomNumber(0, randomWords.size() - 1)).getWord());
-                //}
-
-                //if (LobbyActivity.partida.isRepeat1() && repeat2)...
-                Intent intent = getIntent();
-
-                finish();
-                startActivity(intent);
-            }
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
+            finish();
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -324,24 +300,10 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setTitle(R.string.game_winner);
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //LobbyActivity.partida.setFinished(true);
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // if (repat1 && repeat2)...
-                getRandomWord();
-                //if (LobbyActivity.partida.getPlayer1().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail()))
-                    //LobbyActivity.partida.setRandomWord(randomWords.get(getRandomNumber(0, randomWords.size() - 1)).getWord());
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
+            finish();
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -357,6 +319,16 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         if (!res)
             Toast.makeText(getApplicationContext(), "Non hai conexión a internet.", Toast.LENGTH_SHORT).show();
         return res;
+    }
+
+    private void goHome() {
+        Toast.makeText(getApplicationContext(), "Erro ao iniciar a partida.", Toast.LENGTH_SHORT).show();
+        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        partida.setFinished(true);
+        firebaseDAO.updateGame(partidaId, partida);
+        finish();
+        startActivity(homeIntent);
     }
 
 }

@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         android:text="@string/app_name"
-        android:textSize="50dp"
+        android:textSize="50sp"
         android:textStyle="bold" />
 
     <ImageView
@@ -38,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/iconColor2"
         android:text="@string/singleplayer_bt"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/multiplayer_bt"
@@ -48,7 +48,7 @@
         android:layout_marginVertical="20dp"
         android:text="@string/multiplayer_bt"
         android:backgroundTint="@color/iconColor2"
-        android:textSize="20dp"/>
+        android:textSize="20sp"/>
 
     <Button
         android:id="@+id/diccionario_bt"
@@ -58,7 +58,7 @@
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/iconColor2"
         android:text="@string/dicionario"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 public class Partida implements Parcelable {
 
-    private boolean repeat1;
-    private boolean repeat2;
     private String player1;
     private String player2;
     private String randomWord;
@@ -18,24 +16,22 @@ public class Partida implements Parcelable {
     private boolean isReadyPlayer2;
     private boolean isFinished;
 
+    public Partida(){
 
-    public Partida() {
     }
 
-    public boolean isRepeat2() {
-        return repeat2;
-    }
-
-    public void setRepeat2(boolean repeat2) {
-        this.repeat2 = repeat2;
-    }
-
-    public boolean isRepeat1() {
-        return repeat1;
-    }
-
-    public void setRepeat1(boolean repeat1) {
-        this.repeat1 = repeat1;
+    public Partida(String player1, String player2, String randomWord, String letrasAcertadas1,
+                   String letrasAcertadas2, String ganador, int numPlayers, boolean isReadyPlayer1, boolean isReadyPlayer2, boolean isFinished) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.randomWord = randomWord;
+        this.letrasAcertadas1 = letrasAcertadas1;
+        this.letrasAcertadas2 = letrasAcertadas2;
+        this.ganador = ganador;
+        this.numPlayers = numPlayers;
+        this.isReadyPlayer1 = isReadyPlayer1;
+        this.isReadyPlayer2 = isReadyPlayer2;
+        this.isFinished = isFinished;
     }
 
     public Partida(String player1, String randomWord, int numPlayers) {
@@ -49,8 +45,6 @@ public class Partida implements Parcelable {
         this.isReadyPlayer1 = false;
         this.isReadyPlayer2 = false;
         this.isFinished = false;
-        this.repeat1 = false;
-        this.repeat2 = false;
     }
 
     public boolean isFinished() {
@@ -134,7 +128,7 @@ public class Partida implements Parcelable {
     }
 
     public Partida(Parcel in) {
-        String[] data = new String[12];
+        String[] data = new String[10];
 
         in.readStringArray(data);
         this.player1 = data[0];
@@ -147,8 +141,6 @@ public class Partida implements Parcelable {
         this.isReadyPlayer1 = Boolean.parseBoolean(data[7]);
         this.isReadyPlayer2 = Boolean.parseBoolean(data[8]);
         this.isFinished = Boolean.parseBoolean(data[9]);
-        this.repeat1 = Boolean.parseBoolean(data[10]);
-        this.repeat2 = Boolean.parseBoolean(data[11]);
     }
 
     public int describeContents() {
@@ -167,9 +159,7 @@ public class Partida implements Parcelable {
                 String.valueOf(this.numPlayers),
                 String.valueOf(this.isReadyPlayer1),
                 String.valueOf(this.isReadyPlayer2),
-                String.valueOf(this.isFinished),
-                String.valueOf(this.repeat1),
-                String.valueOf(this.repeat2)});
+                String.valueOf(this.isFinished)});
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

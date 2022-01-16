@@ -1,6 +1,7 @@
 package com.example.forcapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -69,7 +70,7 @@ public class ResetPassword extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Email enviado.", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    goHome();
                                 } else {
                                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                                     errorToast(errorCode);
@@ -81,6 +82,13 @@ public class ResetPassword extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void goHome() {
+        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finish();
+        startActivity(homeIntent);
     }
 
     private void errorToast(String errorCode) {

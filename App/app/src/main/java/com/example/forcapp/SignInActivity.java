@@ -1,6 +1,7 @@
 package com.example.forcapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -83,9 +84,7 @@ public class SignInActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
                                     daoFirebase.addUser(new Users(email));
-
-
-                                    finish();
+                                    goHome();
                                 } else {
                                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                                     errorToast(errorCode);
@@ -97,48 +96,17 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
-/*public void createUser(String email) {
 
-        Users user = new Users(email);
-
-        myRef.child("users").child("user1").setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Log.d("Realtime", "Añadido correctamente");
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("Realtime", "Error al añadir: " + e);
-            }
-        });
-}*/
- /*   public void createUser(String email) {
-
-        Map<String, Object> user = new HashMap<>();
-
-        user.put("email", email);
-
-        db.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d("DB", "Add correctly with ID:" + documentReference.getId());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("DB", "Error adding document: " + e);
-            }
-        });
+    private void goHome() {
+        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+        homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        finish();
+        startActivity(homeIntent);
     }
-*/
+
     private void errorToast(String errorCode) {
 
         switch (errorCode) {
-
-            /*
-            PASAR A GALEGO
-             */
 
             case "ERROR_INVALID_CUSTOM_TOKEN":
                 Toast.makeText(SignInActivity.this, R.string.ERROR_INVALID_CUSTOM_TOKEN, Toast.LENGTH_LONG).show();

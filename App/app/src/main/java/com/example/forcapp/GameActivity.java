@@ -8,8 +8,6 @@ import com.example.forcapp.entity.Word;
 
 public interface GameActivity {
 
-    void getRandomWord();
-
     void disableButtons();
 
     default int getRandomNumber(int min, int max) {

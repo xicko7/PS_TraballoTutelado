@@ -1,5 +1,7 @@
 package com.example.forcapp;
 
+import static com.example.forcapp.MainActivity.defaultWordList;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,14 +30,15 @@ import com.example.forcapp.entity.Word;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Singleplayer extends AppCompatActivity implements GameActivity {
 
     private int intentos, numCorrectos;
     private String randomWord;
     private GridView gridView;
-    private final List<ImageView> faults = new ArrayList();
-    private final List<TextView> charViews = new ArrayList();
+    private List<ImageView> faults;
+    private List<TextView> charViews;
     private LinearLayout wordLayout;
     private final Collator myCollator = Collator.getInstance();
     private boolean gameFinished;
@@ -44,7 +47,10 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.singleplayer_layout);
-        getSupportActionBar().setTitle(R.string.singleplayer_bt);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.singleplayer_bt);
+
+        faults = new ArrayList();
+        charViews = new ArrayList();
 
         intentos = 0;
         numCorrectos = 0;
@@ -60,7 +66,7 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
 
     private void setUI() {
 
-        ArrayList<Integer> ids = new ArrayList<Integer>();
+        ArrayList<Integer> ids = new ArrayList<>();
 
         ids.add(R.id.fault1_sp);
         ids.add(R.id.fault2_sp);
@@ -85,18 +91,14 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Respond to the action bar's Up/Home button
-                if (!gameFinished) {
-                    createExitDialog();
-                    return true;
-                } else
-                    return false;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {// Respond to the action bar's Up/Home button
+            if (!gameFinished) {
+                createExitDialog();
+                return true;
+            } else
+                return false;
         }
+        return super.onOptionsItemSelected(item);
 
     }
 
@@ -109,13 +111,11 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
     }
 
     private class LetterAdapter extends BaseAdapter {
-        private String[] letters;
-        private LayoutInflater letterInf;
-        private Context context;
+        private final String[] letters;
+        private final LayoutInflater letterInf;
 
         public LetterAdapter(Context context) {
             letters = new String[26];
-            this.context = context;
             for (int i = 0; i < letters.length; i++) {
                 letters[i] = "" + (char) (i + 'A');
             }
@@ -145,14 +145,11 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             } else {
                 buttonLetter = (Button) view;
             }
-            buttonLetter.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (numCorrectos != randomWord.length()) {
-                        tapLetter(letters[i], view);
-                    } else {
-                        createWinnerDialog();
-                    }
+            buttonLetter.setOnClickListener(view1 -> {
+                if (numCorrectos != randomWord.length()) {
+                    tapLetter(letters[i], view1);
+                } else {
+                    createWinnerDialog();
                 }
             });
             buttonLetter.setText(letters[i]);
@@ -195,14 +192,13 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
 
     }
 
-    @Override
     public void getRandomWord() {
         class GetRandomWord extends AsyncTask<Void, Void, List<Word>> { // claseinterna
             @Override
             protected List<Word> doInBackground(Void... voids) {
                 List<Word> words = WordDatabaseClient.getInstance(getApplicationContext()).getWordDatabase().getWordDao().getAllWords();
                 if (words.size() == 0) {
-                    words = Dictionary.defaulWordList;
+                    words = defaultWordList;
                 }
                 return words;
             }
@@ -244,17 +240,9 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getString(R.string.exit) + "?");
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.cont, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> finish());
+        builder.setNegativeButton(R.string.cont, (dialogInterface, i) -> {
 
-            }
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -267,19 +255,11 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         builder.setTitle(getString(R.string.game_over));
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> finish());
+        builder.setNegativeButton(R.string.new_game, (dialogInterface, i) -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -291,19 +271,11 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         builder.setTitle(R.string.game_winner);
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
-        builder.setPositiveButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_game, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Intent intent = getIntent();
-                finish();
-                startActivity(intent);
-            }
+        builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> finish());
+        builder.setNegativeButton(R.string.new_game, (dialogInterface, i) -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         });
         AlertDialog alert = builder.create();
         alert.show();

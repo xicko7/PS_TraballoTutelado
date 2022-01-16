@@ -1,5 +1,7 @@
 package com.example.forcapp;
 
+import static com.example.forcapp.MainActivity.defaultWordList;
+
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,7 +31,6 @@ public class Dictionary extends AppCompatActivity {
 
     RecyclerView recyclerView;
     private WordsAdapter mAdapter;
-    static List<Word> defaulWordList;
     ArrayList<Word> initialData = new ArrayList<>();
 
     @Override
@@ -41,15 +42,14 @@ public class Dictionary extends AppCompatActivity {
 
         // Engadir as palabras por defecto da app
         setUI();
-        defaulWordList = createDefaultWordList();
-        insertDefaultWordList(defaulWordList, false);
+        insertDefaultWordList(defaultWordList, false);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mAdapter.getItemCount()==0)
-            insertDefaultWordList(defaulWordList, false);
+            insertDefaultWordList(defaultWordList, false);
     }
 
     private void setUI() {
@@ -77,7 +77,7 @@ public class Dictionary extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_layout, menu);
+        inflater.inflate(R.menu.menu_dictionary_layout, menu);
         return true;
     }
 
@@ -162,53 +162,6 @@ public class Dictionary extends AppCompatActivity {
         gf.execute();
     }
 
-    public List<Word> createDefaultWordList() {
-
-        List<Word> defaultWordList = new ArrayList<>();
-
-        if (!defaultWordList.isEmpty()) {
-            defaultWordList.clear();
-        }
-        defaultWordList.add(new Word(getString(R.string.word1)));
-        defaultWordList.add(new Word(getString(R.string.word2)));
-        defaultWordList.add(new Word(getString(R.string.word3)));
-        defaultWordList.add(new Word(getString(R.string.word4)));
-        defaultWordList.add(new Word(getString(R.string.word5)));
-        defaultWordList.add(new Word(getString(R.string.word6)));
-        defaultWordList.add(new Word(getString(R.string.word7)));
-        defaultWordList.add(new Word(getString(R.string.word8)));
-        defaultWordList.add(new Word(getString(R.string.word9)));
-        defaultWordList.add(new Word(getString(R.string.word10)));
-        defaultWordList.add(new Word(getString(R.string.word11)));
-        defaultWordList.add(new Word(getString(R.string.word12)));
-        defaultWordList.add(new Word(getString(R.string.word13)));
-        defaultWordList.add(new Word(getString(R.string.word14)));
-        defaultWordList.add(new Word(getString(R.string.word15)));
-        defaultWordList.add(new Word(getString(R.string.word16)));
-        defaultWordList.add(new Word(getString(R.string.word17)));
-        defaultWordList.add(new Word(getString(R.string.word18)));
-        defaultWordList.add(new Word(getString(R.string.word19)));
-        defaultWordList.add(new Word(getString(R.string.word20)));
-        defaultWordList.add(new Word(getString(R.string.word21)));
-        defaultWordList.add(new Word(getString(R.string.word22)));
-        defaultWordList.add(new Word(getString(R.string.word23)));
-        defaultWordList.add(new Word(getString(R.string.word24)));
-        defaultWordList.add(new Word(getString(R.string.word25)));
-        defaultWordList.add(new Word(getString(R.string.word26)));
-        defaultWordList.add(new Word(getString(R.string.word27)));
-        defaultWordList.add(new Word(getString(R.string.word28)));
-        defaultWordList.add(new Word(getString(R.string.word29)));
-        defaultWordList.add(new Word(getString(R.string.word30)));
-        defaultWordList.add(new Word(getString(R.string.word31)));
-        defaultWordList.add(new Word(getString(R.string.word32)));
-        defaultWordList.add(new Word(getString(R.string.word33)));
-        defaultWordList.add(new Word(getString(R.string.word34)));
-        defaultWordList.add(new Word(getString(R.string.word35)));
-        defaultWordList.add(new Word(getString(R.string.word36)));
-
-        return defaultWordList;
-    }
-
     private void removeWord(WordsAdapter mAdapter, int pos) {
         class RemoveWord extends AsyncTask<Void, Void, Word> { // claseinterna
             @Override
@@ -272,7 +225,7 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                insertDefaultWordList(createDefaultWordList(), true);
+                insertDefaultWordList(defaultWordList, true);
             }
         });
         builder.setNegativeButton(R.string.add_word, new DialogInterface.OnClickListener() {
@@ -362,7 +315,7 @@ public class Dictionary extends AppCompatActivity {
         builder.setPositiveButton(R.string.dialog_acept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                insertDefaultWordList(createDefaultWordList(), true);
+                insertDefaultWordList(defaultWordList, true);
             }
         });
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

@@ -100,4 +100,5 @@
     <string name="email">email</string>
     <string name="id_partida">ID PARTIDA</string>
     <string name="database_link">https://forcapp-bc7d8-default-rtdb.europe-west1.firebasedatabase.app/</string>
+    <string name="compartir">compartir</string>
 </resources>

@@ -30,7 +30,7 @@ import java.util.Map;
 //TODO Eliminar strings estáticos e crealos comos recursos
 public class FirebaseDAO {
 
-    private final DatabaseReference databaseReference;
+    public final DatabaseReference databaseReference;
     private String partidaId;
 
     public FirebaseDAO() {
@@ -102,11 +102,9 @@ public class FirebaseDAO {
                 partidaMap.put("letrasAcertadas2", partida.getLetrasAcertadas2());
                 partidaMap.put("ganador", partida.getGanador());
                 partidaMap.put("numPlayers", partida.getNumPlayers());
-                partidaMap.put("isReadyPLayer1", partida.isReadyPlayer1());
+                partidaMap.put("isReadyPlayer1", partida.isReadyPlayer1());
                 partidaMap.put("isReadyPlayer2", partida.isReadyPlayer2());
                 partidaMap.put("isFinished", partida.isFinished());
-                partidaMap.put("repeat1", partida.isRepeat1());
-                partidaMap.put("repeat2", partida.isRepeat2());
                 databaseReference.child("Partida").child(partidaId).updateChildren(partidaMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -142,28 +140,69 @@ public class FirebaseDAO {
     }
 
 
-
-    public Partida getGameById(String partidaId) {
-        return databaseReference.child("Partida").child(partidaId).get().getResult().getValue(Partida.class);
+    public Partida getGameById(String partidaId) throws InterruptedException {
+        Partida partida;
+        Thread.sleep(100);
+        Task<DataSnapshot> task = databaseReference.child("Partida").child(partidaId).get();
+        Thread.sleep(100);
+        DataSnapshot dataSnapshot = task.getResult();
+        Thread.sleep(100);
+        assert dataSnapshot != null;
+        partida = dataSnapshot.getValue(Partida.class);
+        Thread.sleep(100);
+        return partida;
     }
 
 
-    public void updateGame(String partidaId, Map<String, Object> hashMap) {
-        class UpdateGame extends AsyncTask<Void, Void, Void> { // claseinterna
-            @Override
-            protected Void doInBackground(Void... voids) {
-                databaseReference.child("Partida").child(partidaId).updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("Realtime", "Datos actualizados correctamente");
-                    }
-                });
-                return null;
-            }
+    public void updateGame(String partidaId, Partida partida) {
+        Map<String, Object> partidaMap;
 
+        partidaMap = new HashMap<>();
+        partidaMap.put("player1", partida.getPlayer1());
+        partidaMap.put("player2", partida.getPlayer2());
+        partidaMap.put("randomWord", partida.getRandomWord());
+        partidaMap.put("letrasAcertadas1", partida.getLetrasAcertadas1());
+        partidaMap.put("letrasAcertadas2", partida.getLetrasAcertadas2());
+        partidaMap.put("ganador", partida.getGanador());
+        partidaMap.put("numPlayers", partida.getNumPlayers());
+        partidaMap.put("isReadyPlayer1", partida.isReadyPlayer1());
+        partidaMap.put("isReadyPlayer2", partida.isReadyPlayer2());
+        partidaMap.put("isFinished", partida.isFinished());
+        databaseReference.child("Partida").child(partidaId).updateChildren(partidaMap);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        UpdateGame gf = new UpdateGame();
-        gf.execute();
+
+
+    }
+
+    public void player1Ready(String partidaId) {
+        Map<String, Object> partidaMap;
+
+        partidaMap = new HashMap<>();
+        partidaMap.put("isReadyPlayer1", true);
+        databaseReference.child("Partida").child(partidaId).updateChildren(partidaMap);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void player2Ready(String partidaId) {
+        Map<String, Object> partidaMap;
+
+        partidaMap = new HashMap<>();
+        partidaMap.put("isReadyPlayer2", true);
+        databaseReference.child("Partida").child(partidaId).updateChildren(partidaMap);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
