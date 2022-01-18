@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -54,7 +55,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     String wordList2;
     private ProgressBar progressCircular;
     private TextView countTV;
-    private Thread countThread;
+    private CountTask countTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +110,9 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         wordList1 = "";
         wordList2 = "";
 
-        countThread = new CountThread();
-        countThread.start();
+        countTask.cancel(true);
+        countTask = new CountTask();
+        countTask.execute();
     }
 
     private void setGameUI() {
@@ -200,8 +202,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if(countThread.isAlive())
-                    countThread.interrupt();
+                countTask.cancel(true);
 
                 if (snapshot.exists() && snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
                     partida.setFinished(true);
@@ -288,10 +289,9 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         void tapLetter(String letter, View view) {
             view.setEnabled(false);
             view.setVisibility(View.GONE);
-            if(countThread.isAlive())
-                countThread.interrupt();
-            countThread = new CountThread();
-            countThread.start();
+            countTask.cancel(true);
+            countTask = new CountTask();
+            countTask.execute();
 
             boolean correcto = false;
 
@@ -409,8 +409,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     }
 
     private void goHome() {
-        if (countThread.isAlive())
-            countThread.interrupt();
+        countTask.cancel(true);
         Toast.makeText(getApplicationContext(), "Erro ao iniciar a partida.", Toast.LENGTH_SHORT).show();
         Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -420,30 +419,45 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         startActivity(homeIntent);
     }
 
-    class CountThread extends Thread {
-        private final int count = 10;
-        public void run() {
-            int count = 10;
+    public class CountTask extends AsyncTask<Void, Integer, Void> {
+        int count = 10;
+
+        @Override
+        protected Void doInBackground(Void... progress) {
+
             // tarea pesada
             for (int i = count; i >= 0; i--) {
+                publishProgress(i);
+                if (isCancelled()) break;
+            }
+
+            return null;
+        }
+
+        protected void onCancelled() {
+            String TAG = "_TAG";
+            Log.d(TAG, "Cancelled ");
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            progressCircular.incrementProgressBy((int) progressCircular.getProgress() / count);
+            countTV.setText(String.valueOf(progress[0]));
+            if (progress[0] == 0) {
+                if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
+                    firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                else
+                    firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                Toast.makeText(getApplicationContext(), "O tempo expirou.", Toast.LENGTH_SHORT).show();
+            } else {
                 try {
-                    progressCircular.incrementProgressBy((int) progressCircular.getProgress()/count);
-                    countTV.setText(String.valueOf(i));
-                    if (i == 0) {
-                        if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
-                            firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                        else
-                            firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                        Toast.makeText(getApplicationContext(), "O tempo expirou.", Toast.LENGTH_SHORT).show();
-                    } else
-                        Thread.sleep(1000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
     }
-
 
 
 }

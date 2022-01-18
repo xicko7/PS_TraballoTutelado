@@ -119,6 +119,8 @@ public class FirebaseDAO {
     public Partida getGameById(String partidaId) {
         Partida partida;
         Task<DataSnapshot> task = databaseReference.child("Partida").child(partidaId).get();
+        // Permitímonos facer esta espera saltando as bases dunha linguaxe orientada a eventos xa que se debe a unha espera
+        // imperceptible para o usuario e sempre se vai a completar. Vén dada por unha dependencia con firebase.
         while(!task.isComplete());
         DataSnapshot dataSnapshot = task.getResult();
         if (dataSnapshot.exists()) {
