@@ -1,41 +1,39 @@
 \chapter{Deseño}
 \label{chap:deseño}
 \section {Arquitectura proposta}
-A arquitectura proposta aísla o código de desenvolvemento da base de datos e todas as funcións relacionadas con \textit{Room} do dionario do resto da aplicación (modelo).\\
+A arquitectura proposta aísla o código de desenvolvemento da base de datos e todas as funcións relacionadas con \textit{Room} do dicionario do resto da aplicación (modelo).\\
 Tamén proponse unha interface para implementar os métodos en común entre os dous modos de xogo.
 
 
 \section {Persistencia}
 Almacenarase un dicionario coas palabras introducidas nunha base de datos. Non será posible abandoar o dicionario deixándoo baleiro e se se destrúe a aplicación restablécese. \\
-
+\\
 Coa axuda de \textit{Firebase} almacenaranse os usuarios rexistrados na aplicación co seu correo e a súa identificación. \\
+\\
 Plantéxase a idea de gardar tamén un historial das partidas para poder elaborar un cadro estatístico de cada perfil e poder ser consultado, pero esta idea quedará para traballos futuros.
 
 \section {Vista}
-Valóranse facer catro funcionalidades principais distintas coas súas correspondentes vistas.\\
-
-A primeira delas para o menú principal, constará de tres botóns. Un para o modo de un xogador, outra para o modo multixogador e outro para o acceso ao dicionario da aplicación. Amosaranse tamén o logo da aplicación e o nome.\\
-
-Seguindo a orde dos anteriores botóns, será necesaria unha vista para a partida de un solo xogador que constará dun debuxo do forcado con diferentes partes que irán modificando a súa visibilidade con cada fallo dinamicamente, un recadro para os ocos das letras da palabra a adiviñar e un botón por cada letra deseñado programaticamente no que ao pulsar unha letra fanse as correspondentes comprobacións e desactívase o botón pulsado. Habiñitaríase o botón de atrás na \textit{ActionBar}. \\
-
+Valóranse facer catro funcionalidades principais distintas coas súas correspondentes vistas. A primeira delas para o menú principal, constará de tres botóns. Un para o modo de un xogador, outra para o modo multixogador e outro para o acceso ao dicionario da aplicación. Amosaranse tamén o logo da aplicación e o nome.\\
+\\
+Seguindo a orde dos anteriores botóns, será necesaria unha vista para a partida de un solo xogador que constará dun debuxo do forcado con diferentes partes que irán modificando a súa visibilidade con cada fallo dinamicamente, un recadro para os ocos das letras da palabra a adiviñar e un botón por cada letra deseñado programaticamente no que ao pulsar unha letra fanse as correspondentes comprobacións e desactívase o botón pulsado. Habilitaríase o botón de atrás na \textit{ActionBar}. \\
+\\
 Para o multixogador serían necesarias máis vistas. Unha para o xogo en si, similar á anterior pero con algún detalle como un contador entre pulsacións e outra con dous botóns na que se poida crear unha sala para a partida ou unirse a unha mediante un código; se o usuario está autenticado amósase tamén un botón de pechar sesión. E para a parte de autenticación (soamente funcional dentro do multixogador) serían necesarias tres vistas principais. A primeira delas unha pantalla na que se amosan tres botóns para inicar sesión, rexistrarse e recuperar o contrasinal ademais de dous \textit{EditText} para o correo e o contrasinal. Se se preme no botón de recuperar o contrasinal só quedaría o \textit{EditText} do correo e un novo botón de acción. Por outro lado ao premer o botón de rexistrarse quedaría un botón de acción cos \textit{EditText} pertinentes para o rexistro dos datos. \\
-
-Por último, para o dicionario utilizarase un \textit{RecyclerView} coas palabras, que ao ser pulsadas poderán ser eliminadas, e un menú de opcións coa posibilidade de eliminar todas as palabras, restablecer o dicionario ou engadir unha palabra.
-
-Cabe destacar que axudarémonos dalgún \textit{Toast} e bastantes \textit{AlertDialog} para mellorar a exoeriencia do usuario.
+\\
+Por último, para o dicionario utilizarase un \textit{RecyclerView} coas palabras, que ao ser pulsadas poderán ser eliminadas, e un menú de opcións coa posibilidade de eliminar todas as palabras, restablecer o dicionario ou engadir unha palabra.\\
+\\
+Cabe destacar que en case tódalas actividades axudarémonos dalgún \textit{Toast} e bastantes \textit{AlertDialog} para mellorar a experiencia do usuario.
 
 \section {Comunicacións}
 As comunicacións implementadas no modo de un xogador baséanse en consultas a unha base de datos. \\
-Por outro lado, no modo multixogador precisaranse comunicacións entre dous dispositivos distintos a través de internet. Este método baséase no típico modelo no que un xogagor crea unha sala virtual cun código e outros xogadores únense mediante ese código. Para facer isto axudarémonos de \textit{Firebase} para elaborar unha autenticación dos usuarios e as comunicacións entre eles durante a partida.
-
-\section {Sensores}
-Para a utilización desta aplicación non é necesario ningún hardware específico do dispositivo utilizado salvando os sensores WiFi para obter conexión a internet. Necesitaranse os peermisos adecuados no manifesto da aplicación. 
+\\
+Por outro lado, no modo multixogador precisaranse comunicacións entre dous dispositivos distintos a través de internet. Este método baséase no típico modelo no que un xogador crea unha sala virtual cun código e o outro xogadore únese introducindo ese código. Neste aspecto axudarémonos de \textit{Firebase} para elaborar unha autenticación dos usuarios e as comunicacións entre eles durante a partida. 
+\\ \section {Sensores}
+Para a utilización desta aplicación non é necesario ningún hardware específico do dispositivo utilizado exceptuando os sensores WiFi para obter conexión a internet no modo multixogador (que a aplicación seguiría sendo funcional co modo dun xogador sen o funcionamento do sensor).\\
+Necesitaranse os permisos adecuados no manifesto da aplicación, non se necesitarán máis permisos para respectar a privacidade do usuario e a experiencia (non resulta cómodo ter que estar concedendo permisos a unha aplicación de terceiros). 
 
 \section {Traballo en background} 
-No modo multixogador plantéxase facer un thread que comprobe a conexión a internet periódicamente e outro para un contador entre cada selección. \\ Ademais, tódalas consultas á base de datos fanse mediante \textit{AsynkTask}.
-
-
-
-
+No modo multixogador plantéxase facer un thread  para o contador das partidas multixogador entre as seleccións de cada letra. \\
+\\
+Tódalas consultas á base de datos á base de datos local do dicionario como a \textit{Realtime Database} de \textit{Firebase} faranse mediante \textit{AsyncTask}s.
 
 \let\cleardoublepage=\clearpage
