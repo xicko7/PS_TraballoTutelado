@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -55,7 +53,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     String wordList2;
     private ProgressBar progressCircular;
     private TextView countTV;
-    private CountTask countTask;
+    private CountThread countThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,9 +108,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         wordList1 = "";
         wordList2 = "";
 
-        countTask.cancel(true);
-        countTask = new CountTask();
-        countTask.execute();
+        countThread = new CountThread(true);
+        countThread.start();
     }
 
     private void setGameUI() {
@@ -202,11 +199,10 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                countTask.cancel(true);
+                if (countThread.isAlive())
+                    countThread.interrupt();
 
                 if (snapshot.exists() && snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-                    partida.setFinished(true);
-                    firebaseDAO.updateGame(partidaId, partida);
                     createWinnerDialog();
                 }
 
@@ -225,10 +221,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue().equals(true)) {
-                    Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
-                    homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     finish();
-                    startActivity(homeIntent);
                 }
             }
 
@@ -289,9 +282,12 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         void tapLetter(String letter, View view) {
             view.setEnabled(false);
             view.setVisibility(View.GONE);
-            countTask.cancel(true);
-            countTask = new CountTask();
-            countTask.execute();
+
+            countThread.setStopped(true);
+            if (countThread.isAlive())
+                countThread.interrupt();
+            countThread = new CountThread(false);
+            countThread.start();
 
             boolean correcto = false;
 
@@ -376,7 +372,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
-            finish();
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -390,7 +387,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         builder.setMessage(getString(R.string.word_was) + " " + randomWord);
 
         builder.setPositiveButton(R.string.exit, (dialogInterface, i) -> {
-            finish();
+            partida.setFinished(true);
+            firebaseDAO.updateGame(partidaId, partida);
         });
         AlertDialog alert = builder.create();
         alert.show();
@@ -409,7 +407,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     }
 
     private void goHome() {
-        countTask.cancel(true);
+        if (countThread.isAlive())
+            countThread.interrupt();
         Toast.makeText(getApplicationContext(), "Erro ao iniciar a partida.", Toast.LENGTH_SHORT).show();
         Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -419,41 +418,43 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         startActivity(homeIntent);
     }
 
-    public class CountTask extends AsyncTask<Void, Integer, Void> {
-        int count = 10;
+    class CountThread extends Thread {
+        private boolean stopped;
+        private final boolean firstThread;
 
-        @Override
-        protected Void doInBackground(Void... progress) {
+        public CountThread(boolean firstThread){
+            this.firstThread = firstThread;
+            this.stopped = false;
+        }
 
-            // tarea pesada
+        public boolean isStopped() {
+            return stopped;
+        }
+
+        public void setStopped(boolean interrupted) {
+            this.stopped = interrupted;
+        }
+
+        public void run() {
+            int count = 10;
             for (int i = count; i >= 0; i--) {
-                publishProgress(i);
-                if (isCancelled()) break;
-            }
-
-            return null;
-        }
-
-        protected void onCancelled() {
-            String TAG = "_TAG";
-            Log.d(TAG, "Cancelled ");
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            progressCircular.incrementProgressBy((int) progressCircular.getProgress() / count);
-            countTV.setText(String.valueOf(progress[0]));
-            if (progress[0] == 0) {
-                if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
-                    firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                else
-                    firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                Toast.makeText(getApplicationContext(), "O tempo expirou.", Toast.LENGTH_SHORT).show();
-            } else {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (!stopped || firstThread && this == countThread) {
+                    try {
+                        progressCircular.incrementProgressBy((int) progressCircular.getProgress() / count);
+                        countTV.setText(String.valueOf(i));
+                        if (i == 0) {
+                            Toast.makeText(getApplicationContext(), "O tempo expirou.", Toast.LENGTH_SHORT).show();
+                            disableButtons();
+                            Thread.sleep(1000);
+                            if (Objects.requireNonNull(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getEmail()).equals(partida.getPlayer1()))
+                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                            else
+                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                        } else
+                            Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
