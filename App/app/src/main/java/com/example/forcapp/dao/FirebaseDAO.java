@@ -116,16 +116,13 @@ public class FirebaseDAO {
     }
 
 
-    public Partida getGameById(String partidaId) throws InterruptedException {
+    public Partida getGameById(String partidaId) {
         Partida partida;
-        Thread.sleep(100);
         Task<DataSnapshot> task = databaseReference.child("Partida").child(partidaId).get();
-        Thread.sleep(100);
+        while(!task.isComplete());
         DataSnapshot dataSnapshot = task.getResult();
-        Thread.sleep(100);
         if (dataSnapshot.exists()) {
             partida = dataSnapshot.getValue(Partida.class);
-            Thread.sleep(100);
             return partida;
         }else
             return null;

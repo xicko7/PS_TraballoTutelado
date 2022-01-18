@@ -204,7 +204,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                     countThread.interrupt();
 
                 if (snapshot.exists() && snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-                    //TODO aqui termina a partida, porque si estaba dentro dos dialogs petaba ao salir da primeiro dunha e despois doutra.
                     partida.setFinished(true);
                     firebaseDAO.updateGame(partidaId, partida);
                     createWinnerDialog();
@@ -410,6 +409,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     }
 
     private void goHome() {
+        if (countThread.isAlive())
+            countThread.interrupt();
         Toast.makeText(getApplicationContext(), "Erro ao iniciar a partida.", Toast.LENGTH_SHORT).show();
         Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
         homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

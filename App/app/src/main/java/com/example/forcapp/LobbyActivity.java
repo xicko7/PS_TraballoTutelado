@@ -110,7 +110,6 @@ public class LobbyActivity extends AppCompatActivity {
                 findViewById(R.id.spinner).setVisibility(View.VISIBLE);
                 partidaId = input.getText().toString();
                 try {
-                    Thread.sleep(100);
                     partida = firebaseDAO.getGameById(partidaId);
                     if (partida==null){
                         Toast.makeText(getApplicationContext(), "Partida non atopada", Toast.LENGTH_SHORT).show();
@@ -118,9 +117,8 @@ public class LobbyActivity extends AppCompatActivity {
                         return;
                     }
                     setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
-                    Thread.sleep(100);
-                } catch (RuntimeException | InterruptedException e) {
-                    Toast.makeText(getApplicationContext(), "Problema ao cargar a partida.", Toast.LENGTH_SHORT).show();
+                } catch (RuntimeException e) {
+                    Toast.makeText(getApplicationContext(), "Problema ao cargar a partida. Inténtao de novo.", Toast.LENGTH_SHORT).show();
                     findViewById(R.id.spinner).setVisibility(View.GONE);
                     return;
                 }

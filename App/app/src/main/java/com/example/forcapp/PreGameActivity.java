@@ -171,19 +171,12 @@ public class PreGameActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        try {
             partida = firebaseDAO.getGameById(partidaId);
             Intent multiplayerIntent = new Intent(getApplicationContext(), Multiplayer.class);
             multiplayerIntent.putExtra("id", partidaId);
             multiplayerIntent.putExtra("partida", partida);
             finish();
             startActivity(multiplayerIntent);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            partida.setFinished(true);
-            firebaseDAO.updateGame(partidaId, partida);
-            finish();
-        }
     }
 
     void setDatabaseListeners(DatabaseReference ref) {
