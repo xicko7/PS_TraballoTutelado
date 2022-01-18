@@ -53,7 +53,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     String wordList1;
     String wordList2;
     private ProgressBar progressCircular;
-    private Runnable CountRun;
+    private Thread countThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,27 +108,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         wordList1 = "";
         wordList2 = "";
 
-        CountRun = new Runnable() {
-            @Override
-            public void run() {
-                int count = 10;
-                // tarea pesada
-                for (int i = count; i >= 0; i--) {
-                    try {
-                        progressCircular.incrementProgressBy(progressCircular.getProgress()/count);
-                        if (i == 0) {
-                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
-                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                            else
-                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
-                        } else
-                            Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
+        countThread = new CountThread();
+        countThread.start();
     }
 
     private void setGameUI() {
@@ -304,7 +285,10 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         void tapLetter(String letter, View view) {
             view.setEnabled(false);
             view.setVisibility(View.GONE);
-
+            if(countThread.isAlive())
+                countThread.interrupt();
+            countThread = new CountThread();
+            countThread.start();
 
             boolean correcto = false;
 
@@ -341,8 +325,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                     disableButtons();
                     gameFinished = true;
                     firebaseDAO.setWinner(partidaId, FirebaseAuth.getInstance().getCurrentUser().getEmail());
-
-
                 }
             } else if (intentos < 10) {
                 faults.get(intentos).setVisibility(View.VISIBLE);
@@ -432,6 +414,29 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         finish();
         startActivity(homeIntent);
     }
+
+    class CountThread extends Thread {
+        private final int count = 10;
+        public void run() {
+            int count = 10;
+            // tarea pesada
+            for (int i = count; i >= 0; i--) {
+                try {
+                    progressCircular.incrementProgressBy(progressCircular.getProgress()/count);
+                    if (i == 0) {
+                        if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
+                            firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                        else
+                            firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                    } else
+                        Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 
 }

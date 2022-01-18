@@ -112,6 +112,10 @@ public class LobbyActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(100);
                     partida = firebaseDAO.getGameById(partidaId);
+                    if (partida==null){
+                        Toast.makeText(getApplicationContext(), "Partida non atopada", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
                     Thread.sleep(100);
                 } catch (RuntimeException | InterruptedException e) {

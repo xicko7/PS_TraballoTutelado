@@ -31,8 +31,6 @@ public class SignInActivity extends AppCompatActivity {
     EditText emailET, passwordET;
     FirebaseAuth firebaseAuth;
     AwesomeValidation awesomeValidation;
-    FirebaseDAO daoFirebase;
-    //FirebaseFirestore db = FirebaseFirestore.getInstance(); VERSION UTILIZANDO CLOUD FIRESTORE
 
 
     @Override
@@ -42,8 +40,6 @@ public class SignInActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.auth);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        //VERSION UTILIZANDO REALTIME DATABASE
-        daoFirebase = new FirebaseDAO();
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
 
 
@@ -83,7 +79,6 @@ public class SignInActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(getApplicationContext(), "Usuario creado con éxito", Toast.LENGTH_SHORT).show();
-                                    daoFirebase.addUser(new Users(email));
                                     goHome();
                                 } else {
                                     String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();

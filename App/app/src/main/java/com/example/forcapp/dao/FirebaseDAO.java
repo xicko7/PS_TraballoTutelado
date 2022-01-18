@@ -47,33 +47,6 @@ public class FirebaseDAO {
         });
     }
 
-    public void addUser(Users user) {
-        class AddUser extends AsyncTask<Void, Void, Users> { // claseinterna
-            @Override
-            protected Users doInBackground(Void... voids) {
-                databaseReference.child("Users").push().setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("Realtime", "Añadido correctamente");
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Realtime", "Error al añadir: " + e);
-                    }
-                });
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Users user) {
-                super.onPostExecute(user);
-            }
-        }
-        AddUser gf = new AddUser();
-        gf.execute();
-    }
-
     public String createGame(Partida partida) {
 
         class CreateGame extends AsyncTask<Void, Void, String> { // claseinterna
@@ -147,10 +120,12 @@ public class FirebaseDAO {
         Thread.sleep(100);
         DataSnapshot dataSnapshot = task.getResult();
         Thread.sleep(100);
-        assert dataSnapshot != null;
-        partida = dataSnapshot.getValue(Partida.class);
-        Thread.sleep(100);
-        return partida;
+        if (dataSnapshot.exists()) {
+            partida = dataSnapshot.getValue(Partida.class);
+            Thread.sleep(100);
+            return partida;
+        }else
+            return null;
     }
 
 
