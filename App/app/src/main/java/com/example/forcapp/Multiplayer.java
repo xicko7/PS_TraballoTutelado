@@ -199,9 +199,11 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         ref.child("ganador").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(countThread.isAlive())
+                    countThread.interrupt();
+
                 if (snapshot.exists() && snapshot.getValue().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())) {
-                    Log.d("Thread", "Entré en el listener");
-                    //thread.interrupt();
                     //TODO aqui termina a partida, porque si estaba dentro dos dialogs petaba ao salir da primeiro dunha e despois doutra.
                     partida.setFinished(true);
                     firebaseDAO.updateGame(partidaId, partida);
@@ -431,6 +433,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                             firebaseDAO.setWinner(partidaId, partida.getPlayer2());
                         else
                             firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                        Toast.makeText(getApplicationContext(), "O tempo expirou.", Toast.LENGTH_SHORT).show();
                     } else
                         Thread.sleep(1000);
                 } catch (InterruptedException e) {
