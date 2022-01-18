@@ -115,9 +115,13 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
         private final LayoutInflater letterInf;
 
         public LetterAdapter(Context context) {
-            letters = new String[26];
-            for (int i = 0; i < letters.length; i++) {
+            letters = new String[27];
+            for (int i = 0; i < 14; i++) {
                 letters[i] = "" + (char) (i + 'A');
+            }
+            letters[14] = "Ñ";
+            for (int i = 15; i < 27; i++) {
+                letters[i] = "" + (char) (i + '@');
             }
             letterInf = LayoutInflater.from(context);
         }
@@ -207,7 +211,6 @@ public class Singleplayer extends AppCompatActivity implements GameActivity {
             protected void onPostExecute(List<Word> words) {
                 super.onPostExecute(words); // Actualizar la UI
                 randomWord = words.get(getRandomNumber(0, words.size() - 1)).getWord();
-
                 for (int i = 0; i < randomWord.length(); i++) {
                     charViews.add(new TextView(getApplicationContext()));
                     charViews.get(i).setBackgroundResource(R.drawable.guionbajo_letra);

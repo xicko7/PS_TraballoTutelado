@@ -238,9 +238,13 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         private final LayoutInflater letterInf;
 
         public LetterAdapter(Context context) {
-            letters = new String[26];
-            for (int i = 0; i < letters.length; i++) {
+            letters = new String[27];
+            for (int i = 0; i < 14; i++) {
                 letters[i] = "" + (char) (i + 'A');
+            }
+            letters[14] = "Ñ";
+            for (int i = 15; i < 27; i++) {
+                letters[i] = "" + (char) (i + '@');
             }
             letterInf = LayoutInflater.from(context);
         }
