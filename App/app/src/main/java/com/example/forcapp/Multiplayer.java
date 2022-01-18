@@ -53,6 +53,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     String wordList1;
     String wordList2;
     private ProgressBar progressCircular;
+    private TextView countTV;
     private Thread countThread;
 
     @Override
@@ -154,6 +155,7 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         }
 
         progressCircular = findViewById(R.id.progress_circular);
+        countTV = findViewById(R.id.count_tv);
     }
 
 
@@ -422,7 +424,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             // tarea pesada
             for (int i = count; i >= 0; i--) {
                 try {
-                    progressCircular.incrementProgressBy(progressCircular.getProgress()/count);
+                    progressCircular.incrementProgressBy((int) progressCircular.getProgress()/count);
+                    countTV.setText(String.valueOf(i));
                     if (i == 0) {
                         if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
                             firebaseDAO.setWinner(partidaId, partida.getPlayer2());

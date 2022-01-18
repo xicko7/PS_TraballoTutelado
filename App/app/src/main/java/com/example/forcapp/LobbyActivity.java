@@ -114,6 +114,7 @@ public class LobbyActivity extends AppCompatActivity {
                     partida = firebaseDAO.getGameById(partidaId);
                     if (partida==null){
                         Toast.makeText(getApplicationContext(), "Partida non atopada", Toast.LENGTH_SHORT).show();
+                        findViewById(R.id.spinner).setVisibility(View.VISIBLE);
                         return;
                     }
                     setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
