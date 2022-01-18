@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,8 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
     private FirebaseDAO firebaseDAO;
     String wordList1;
     String wordList2;
+    private ProgressBar progress_circular;
+    private Runnable CountRun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +88,14 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         startGame();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        partida.setFinished(true);
+        firebaseDAO.updateGame(partidaId, partida);
+    }
+
     private void startGame() {
-        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.multiplayer_bt);
 
         intentos = 0;
         numCorrectos = 0;
@@ -99,24 +108,32 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
         wordList1 = "";
         wordList2 = "";
 
-        /*thread = new Thread(new Runnable() {
+        CountRun = new Runnable() {
             @Override
             public void run() {
-                while (true)
+                int count = 10;
+                // tarea pesada
+                for (int i = count; i >= 0; i--) {
                     try {
-                        Thread.sleep(100);
-                        setDatabaseListeners(firebaseDAO.databaseReference.child("Partida").child(partidaId));
-                        Log.d("Thread", "Estoy entrando en el Thread");
+                        progress_circular.incrementProgressBy(progress_circular.getProgress()/count);
+                        if (i == 0) {
+                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(partida.getPlayer1()))
+                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                            else
+                                firebaseDAO.setWinner(partidaId, partida.getPlayer2());
+                        } else
+                            Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
+                }
             }
-        });
-        thread.start();*/
+        };
     }
 
     private void setGameUI() {
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.multiplayer_bt);
 
         ArrayList<Integer> ids = new ArrayList<>();
 
@@ -217,6 +234,23 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
             }
         });
 
+        ref.child("isFinished").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue().equals(true)) {
+                    Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    finish();
+                    startActivity(homeIntent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private class LetterAdapter extends BaseAdapter {
@@ -305,7 +339,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                     disableButtons();
                     gameFinished = true;
                     firebaseDAO.setWinner(partidaId, FirebaseAuth.getInstance().getCurrentUser().getEmail());
-                    //createWinnerDialog();
 
 
                 }
@@ -316,7 +349,6 @@ public class Multiplayer extends AppCompatActivity implements GameActivity {
                 faults.get(intentos).setVisibility(View.VISIBLE);
                 disableButtons();
                 gameFinished = true;
-                //createGameOverDialog();
             }
         }
 

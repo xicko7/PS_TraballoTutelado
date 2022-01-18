@@ -274,6 +274,23 @@ public class PreGameActivity extends AppCompatActivity {
             }
         });
 
+        ref.child("isFinished").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue().equals(true)) {
+                    Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+                    homeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    finish();
+                    startActivity(homeIntent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 }

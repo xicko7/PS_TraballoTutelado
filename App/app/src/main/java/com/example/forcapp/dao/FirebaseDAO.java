@@ -114,8 +114,15 @@ public class FirebaseDAO {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            if (snapshot.getValue().equals(true))
+                            if (snapshot.getValue().equals(true)) {
+                                try {
+                                    // Dar tempo para que o outro xogador saia
+                                    Thread.sleep(200);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 removeGame(partidaId);
+                            }
                         }
                     }
 
@@ -244,9 +251,6 @@ public class FirebaseDAO {
         AddUser gf = new AddUser();
         gf.execute();
     }
-
-
-
 
 
 }
