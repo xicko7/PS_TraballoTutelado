@@ -2,7 +2,10 @@
 \label{chap:deseño}
 \section {Arquitectura proposta}
 A arquitectura proposta aísla o código de desenvolvemento da base de datos e todas as funcións relacionadas con \textit{Room} do dicionario do resto da aplicación (modelo).\\
-Tamén proponse unha interface para implementar os métodos en común entre os dous modos de xogo.
+\\
+Propúxose unha interface para implementar os métodos en común entre os dous modos de xogo. Plantexouse elaborar unha clase abstracta que herdasen os dous modos de xogo á hora de xerar a partida pero as dúas clases xa extendían a \textit{AppCompatActivity} entón decantámonos pola interfaz.\\
+\\
+Seguimos unha organizaciónn sinxela na que cada pantalla corresponde a unha actividade en \textit{Android} e unha clase en \textit{Java}, ademais destas clases son necesarias outras para a configuración de \textit{Room} e de \textit{Firebase} e outra oara o adaptador da lista de palabras amosada no dicionario.
 
 
 \section {Persistencia}
@@ -13,7 +16,10 @@ Coa axuda de \textit{Firebase} almacenaranse os usuarios rexistrados na aplicaci
 Plantéxase a idea de gardar tamén un historial das partidas para poder elaborar un cadro estatístico de cada perfil e poder ser consultado, pero esta idea quedará para traballos futuros.
 
 \section {Vista}
-Valóranse facer catro funcionalidades principais distintas coas súas correspondentes vistas. A primeira delas para o menú principal, constará de tres botóns. Un para o modo de un xogador, outra para o modo multixogador e outro para o acceso ao dicionario da aplicación. Amosaranse tamén o logo da aplicación e o nome.\\
+
+Para o comezo a impementación da vista axudámonos dun \textit{wireframe} .dispoñible no repositorio do proxecto, que proporcionaríanos unha idea a alto nivel de como sería o deseño da aplicación\\
+\\
+Valoráronse facer catro funcionalidades principais distintas coas súas correspondentes vistas. A primeira delas para o menú principal, constará de tres botóns. Un para o modo de un xogador, outra para o modo multixogador e outro para o acceso ao dicionario da aplicación. Amosaranse tamén o logo da aplicación e o nome.\\
 \\
 Seguindo a orde dos anteriores botóns, será necesaria unha vista para a partida de un solo xogador que constará dun debuxo do forcado con diferentes partes que irán modificando a súa visibilidade con cada fallo dinamicamente, un recadro para os ocos das letras da palabra a adiviñar e un botón por cada letra deseñado programaticamente no que ao pulsar unha letra fanse as correspondentes comprobacións e desactívase o botón pulsado. Habilitaríase o botón de atrás na \textit{ActionBar}. \\
 \\
@@ -34,6 +40,4 @@ Necesitaranse os permisos adecuados no manifesto da aplicación, non se necesita
 \section {Traballo en background} 
 No modo multixogador plantéxase facer un thread  para o contador das partidas multixogador entre as seleccións de cada letra. \\
 \\
-Tódalas consultas á base de datos á base de datos local do dicionario como a \textit{Realtime Database} de \textit{Firebase} faranse mediante \textit{AsyncTask}s.
-
-\let\cleardoublepage=\clearpage
+Tódalas consultas á base de datos á base de datos local do dicionario como a maioría (sobretodo as pesadas) á \textit{Realtime Database} de \textit{Firebase} faranse mediante \textit{AsyncTask}s.

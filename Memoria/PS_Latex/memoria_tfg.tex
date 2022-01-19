@@ -68,7 +68,7 @@
 \centering
 \begin{tabular}{||c | c||} 
  \hline
- \textbf{Versión} & \textbf{Data}\\ [0.5ex] 
+ \textbf{Versión} & \textbf{Data}\\ [0.6ex] 
  \hline\hline
  0.1 & 04/10/2021\\
   [1ex] 
@@ -83,6 +83,9 @@
   [1ex] 
  \hline
  0.5 & 18/01/2022\\
+  [1ex] 
+ \hline
+ 0.6 & 19/01/2022\\
   [1ex] 
  \hline
 \end{tabular}
@@ -121,18 +124,15 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % Apéndices, glosarios e bibliografía  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
 
- %\appendix
- %\appendixpage
- %\include{anexos/adicional}
-%\include{anexos/...}
-
- %\printglossary[type=\acronymtype,title=\nomeglosarioacronimos]
-% \printglossary[title=\nomeglosariotermos]
-
+  \let\cleardoublepage=\clearpage
+ 
+ \pagenumbering{arabic}
  \bibliographystyle{IEEEtranN}
- \bibliography{\bibconfig,bibliografia/bibliografia}
-  \let\cleardoublepage=\clearpage 
+ \bibliography{\bibconfig,bibliografia/bibliografia.bib}
+ 
+
  
 \end{document}
 
