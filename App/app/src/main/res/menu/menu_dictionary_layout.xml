@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/añadir_menu"
+        android:title="@string/add_word"
+        android:icon="@android:drawable/ic_menu_add"
+        app:showAsAction="ifRoom"
+        />
+
+    <item android:id="@+id/deleteall_menu"
+        android:title="@string/reset"
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/reset_menu"
+        android:title="@string/reset"
+        app:showAsAction="never"/>
+
+</menu>
