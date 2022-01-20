@@ -68,7 +68,7 @@
 \centering
 \begin{tabular}{||c | c||} 
  \hline
- \textbf{Versión} & \textbf{Data}\\ [0.5ex] 
+ \textbf{Versión} & \textbf{Data}\\ [1ex] 
  \hline\hline
  0.1 & 04/10/2021\\
   [1ex] 
@@ -76,6 +76,21 @@
  0.2 & 08/11/2021\\
   [1ex] 
  \hline
+ 0.3 & 13/01/2021\\
+  [1ex] 
+ \hline
+  0.4 & 15/01/2022\\
+  [1ex] 
+ \hline
+ 0.5 & 18/01/2022\\
+  [1ex] 
+ \hline
+ 0.6 & 19/01/2022\\
+  [1ex] 
+ \hline
+ \hline
+ 1.0 & 20/01/2022\\
+  [1ex]
 \end{tabular}
 \caption{Táboa coas versións do proxecto.}
 \label{table:1}
@@ -102,7 +117,7 @@
  \include{contido/plan_inicial}
   \let\cleardoublepage=\clearpage 
  \include{contido/deseño}
-  \let\cleardoublepage=\clearpage 
+  %\let\cleardoublepage=\clearpage 
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % Capítulos                            %
@@ -112,18 +127,16 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  % Apéndices, glosarios e bibliografía  %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
 
- %\appendix
- %\appendixpage
- %\include{anexos/adicional}
-%\include{anexos/...}
-
- %\printglossary[type=\acronymtype,title=\nomeglosarioacronimos]
-% \printglossary[title=\nomeglosariotermos]
-
+  %\let\cleardoublepage=\clearpage
+ 
+ \pagenumbering{arabic}
  \bibliographystyle{IEEEtranN}
  \bibliography{\bibconfig,bibliografia/bibliografia}
-  \let\cleardoublepage=\clearpage 
+ 
+ 
+
  
 \end{document}
 
